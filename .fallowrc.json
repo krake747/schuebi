@@ -1,0 +1,22 @@
+{
+    // Generated sources and build artifacts are excluded from all analyses.
+    "ignorePatterns": ["src/data/attractions-generated.ts", "src/routeTree.gen.ts", "**/*.d.ts"],
+    // src/components/ui/* is a kept-as-is shadcn-style primitive library; its
+    // exports are intentional public API surface, so unused/duplicate exports
+    // there are not reported (ignoreExports suppresses both finding types).
+    "ignoreExports": [{ "file": "src/components/ui/**", "exports": ["*"] }],
+    // Exports referenced within the declaring file (e.g. buttonVariants used
+    // by the Button component) count as usage.
+    "ignoreExportsUsedInFile": true,
+    "duplicates": {
+        // The hit-area-* Tailwind v4 @utility rules each need a self-contained
+        // ::before block (an inherent @utility tradeoff), and the ui primitives
+        // are intentionally kept as-is.
+        "ignore": ["src/index.css", "src/components/ui/**"]
+    },
+    "health": {
+        // Keep complexity noise from the untouched ui primitives out of the
+        // triage list; focus on actionable application code.
+        "ignore": ["src/components/ui/**"]
+    }
+}

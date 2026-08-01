@@ -1,0 +1,9 @@
+node_modules
+dist
+*.local
+.netlify
+.tanstack
+.vitest-attachments
+src/__screenshots__
+.venv
+scripts/data/*.geojson

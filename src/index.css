@@ -1,0 +1,360 @@
+@import "tailwindcss";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/inter";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.147 0.004 49.3);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.147 0.004 49.3);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.147 0.004 49.3);
+    --primary: oklch(0.525 0.223 3.958);
+    --primary-foreground: oklch(0.971 0.014 343.198);
+    --secondary: oklch(0.967 0.001 286.375);
+    --secondary-foreground: oklch(0.21 0.006 285.885);
+    --muted: oklch(0.96 0.002 17.2);
+    --muted-foreground: oklch(0.547 0.021 43.1);
+    --accent: oklch(0.96 0.002 17.2);
+    --accent-foreground: oklch(0.214 0.009 43.1);
+    --destructive: oklch(0.577 0.245 27.325);
+    --destructive-foreground: oklch(0.985 0 0);
+    --border: oklch(0.922 0.005 34.3);
+    --input: oklch(0.922 0.005 34.3);
+    --ring: oklch(0.714 0.014 41.2);
+    --radius: 0.625rem;
+    --chart-1: oklch(0.823 0.12 346.018);
+    --chart-2: oklch(0.656 0.241 354.308);
+    --chart-3: oklch(0.592 0.249 0.584);
+    --chart-4: oklch(0.525 0.223 3.958);
+    --chart-5: oklch(0.459 0.187 3.815);
+    --sidebar: oklch(0.986 0.002 67.8);
+    --sidebar-foreground: oklch(0.147 0.004 49.3);
+    --sidebar-primary: oklch(0.592 0.249 0.584);
+    --sidebar-primary-foreground: oklch(0.971 0.014 343.198);
+    --sidebar-accent: oklch(0.96 0.002 17.2);
+    --sidebar-accent-foreground: oklch(0.214 0.009 43.1);
+    --sidebar-border: oklch(0.922 0.005 34.3);
+    --sidebar-ring: oklch(0.714 0.014 41.2);
+}
+
+.dark {
+    --background: oklch(0.147 0.004 49.3);
+    --foreground: oklch(0.986 0.002 67.8);
+    --card: oklch(0.214 0.009 43.1);
+    --card-foreground: oklch(0.986 0.002 67.8);
+    --popover: oklch(0.214 0.009 43.1);
+    --popover-foreground: oklch(0.986 0.002 67.8);
+    --primary: oklch(0.459 0.187 3.815);
+    --primary-foreground: oklch(0.971 0.014 343.198);
+    --secondary: oklch(0.274 0.006 286.033);
+    --secondary-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.268 0.011 36.5);
+    --muted-foreground: oklch(0.714 0.014 41.2);
+    --accent: oklch(0.268 0.011 36.5);
+    --accent-foreground: oklch(0.986 0.002 67.8);
+    --destructive: oklch(0.704 0.191 22.216);
+    --destructive-foreground: oklch(0.985 0 0);
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: oklch(0.547 0.021 43.1);
+    --chart-1: oklch(0.823 0.12 346.018);
+    --chart-2: oklch(0.656 0.241 354.308);
+    --chart-3: oklch(0.592 0.249 0.584);
+    --chart-4: oklch(0.525 0.223 3.958);
+    --chart-5: oklch(0.459 0.187 3.815);
+    --sidebar: oklch(0.214 0.009 43.1);
+    --sidebar-foreground: oklch(0.986 0.002 67.8);
+    --sidebar-primary: oklch(0.656 0.241 354.308);
+    --sidebar-primary-foreground: oklch(0.971 0.014 343.198);
+    --sidebar-accent: oklch(0.268 0.011 36.5);
+    --sidebar-accent-foreground: oklch(0.986 0.002 67.8);
+    --sidebar-border: oklch(1 0 0 / 10%);
+    --sidebar-ring: oklch(0.547 0.021 43.1);
+}
+
+@theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) + 4px);
+    --font-heading: var(--font-sans);
+    --font-sans: "Inter Variable", sans-serif;
+    --color-sidebar-ring: var(--sidebar-ring);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar: var(--sidebar);
+    --color-chart-5: var(--chart-5);
+    --color-chart-4: var(--chart-4);
+    --color-chart-3: var(--chart-3);
+    --color-chart-2: var(--chart-2);
+    --color-chart-1: var(--chart-1);
+    --radius-2xl: calc(var(--radius) * 1.8);
+    --radius-3xl: calc(var(--radius) * 2.2);
+    --radius-4xl: calc(var(--radius) * 2.6);
+    --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+    --ease-vaul: cubic-bezier(0.32, 0.72, 0, 1);
+    --animate-sheet-up: sheet-up 0.35s var(--ease-vaul);
+    --animate-fade-in: fade-in 0.2s ease-out;
+    --animate-sticker-pop: sticker-pop 0.6s var(--ease-out-expo) both;
+    --animate-pin-bounce: pin-bounce 1.8s ease-in-out infinite;
+    --animate-marker-pop: marker-pop 0.4s var(--ease-out-expo) both;
+}
+
+@layer base {
+    * {
+        @apply border-border outline-ring/50;
+    }
+    .maplibregl-popup-content {
+        @apply rounded-none! bg-transparent! p-0! shadow-none!;
+    }
+    .maplibregl-popup-tip {
+        @apply hidden!;
+    }
+    .maplibregl-ctrl-attrib {
+        @apply rounded-md! border! border-border! bg-background! text-muted-foreground! shadow-sm!;
+    }
+    .maplibregl-ctrl-attrib a {
+        @apply text-muted-foreground!;
+    }
+    .maplibregl-ctrl-attrib a:hover {
+        @apply text-foreground!;
+    }
+    .maplibregl-ctrl-attrib-button {
+        @apply bg-transparent! dark:invert;
+    }
+    .maplibregl-ctrl-group {
+        @apply top-auto! right-3! bottom-20! left-auto!;
+    }
+}
+
+@utility hit-area {
+    position: relative;
+    &::before {
+        content: "";
+        position: absolute;
+        top: var(--hit-area-t, 0px);
+        right: var(--hit-area-r, 0px);
+        bottom: var(--hit-area-b, 0px);
+        left: var(--hit-area-l, 0px);
+        pointer-events: inherit;
+    }
+}
+
+@utility hit-area-* {
+    position: relative;
+    --hit-area-t: --spacing(--value(number) * -1);
+    --hit-area-t: calc(--value([*]) * -1);
+    --hit-area-b: --spacing(--value(number) * -1);
+    --hit-area-b: calc(--value([*]) * -1);
+    --hit-area-l: --spacing(--value(number) * -1);
+    --hit-area-l: calc(--value([*]) * -1);
+    --hit-area-r: --spacing(--value(number) * -1);
+    --hit-area-r: calc(--value([*]) * -1);
+    &::before {
+        content: "";
+        position: absolute;
+        top: var(--hit-area-t, 0px);
+        right: var(--hit-area-r, 0px);
+        bottom: var(--hit-area-b, 0px);
+        left: var(--hit-area-l, 0px);
+        pointer-events: inherit;
+    }
+}
+
+@utility hit-area-l-* {
+    position: relative;
+    --hit-area-l: --spacing(--value(number) * -1);
+    --hit-area-l: calc(--value([*]) * -1);
+    &::before {
+        content: "";
+        position: absolute;
+        top: var(--hit-area-t, 0px);
+        right: var(--hit-area-r, 0px);
+        bottom: var(--hit-area-b, 0px);
+        left: var(--hit-area-l, 0px);
+        pointer-events: inherit;
+    }
+}
+
+@utility hit-area-r-* {
+    position: relative;
+    --hit-area-r: --spacing(--value(number) * -1);
+    --hit-area-r: calc(--value([*]) * -1);
+    &::before {
+        content: "";
+        position: absolute;
+        top: var(--hit-area-t, 0px);
+        right: var(--hit-area-r, 0px);
+        bottom: var(--hit-area-b, 0px);
+        left: var(--hit-area-l, 0px);
+        pointer-events: inherit;
+    }
+}
+
+@utility hit-area-t-* {
+    position: relative;
+    --hit-area-t: --spacing(--value(number) * -1);
+    --hit-area-t: calc(--value([*]) * -1);
+    &::before {
+        content: "";
+        position: absolute;
+        top: var(--hit-area-t, 0px);
+        right: var(--hit-area-r, 0px);
+        bottom: var(--hit-area-b, 0px);
+        left: var(--hit-area-l, 0px);
+        pointer-events: inherit;
+    }
+}
+
+@utility hit-area-b-* {
+    position: relative;
+    --hit-area-b: --spacing(--value(number) * -1);
+    --hit-area-b: calc(--value([*]) * -1);
+    &::before {
+        content: "";
+        position: absolute;
+        top: var(--hit-area-t, 0px);
+        right: var(--hit-area-r, 0px);
+        bottom: var(--hit-area-b, 0px);
+        left: var(--hit-area-l, 0px);
+        pointer-events: inherit;
+    }
+}
+
+@utility hit-area-x-* {
+    position: relative;
+    --hit-area-l: --spacing(--value(number) * -1);
+    --hit-area-l: calc(--value([*]) * -1);
+    --hit-area-r: --spacing(--value(number) * -1);
+    --hit-area-r: calc(--value([*]) * -1);
+    &::before {
+        content: "";
+        position: absolute;
+        top: var(--hit-area-t, 0px);
+        right: var(--hit-area-r, 0px);
+        bottom: var(--hit-area-b, 0px);
+        left: var(--hit-area-l, 0px);
+        pointer-events: inherit;
+    }
+}
+
+@utility hit-area-y-* {
+    position: relative;
+    --hit-area-t: --spacing(--value(number) * -1);
+    --hit-area-t: calc(--value([*]) * -1);
+    --hit-area-b: --spacing(--value(number) * -1);
+    --hit-area-b: calc(--value([*]) * -1);
+    &::before {
+        content: "";
+        position: absolute;
+        top: var(--hit-area-t, 0px);
+        right: var(--hit-area-r, 0px);
+        bottom: var(--hit-area-b, 0px);
+        left: var(--hit-area-l, 0px);
+        pointer-events: inherit;
+    }
+}
+
+@keyframes sheet-up {
+    from {
+        transform: translateY(100%);
+    }
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+}
+
+@keyframes sticker-pop {
+    0% {
+        opacity: 0;
+        transform: rotate(-6deg) translateY(-8px) scale(0.9);
+    }
+    55% {
+        opacity: 1;
+        transform: rotate(1deg) translateY(0) scale(1.05);
+    }
+    75% {
+        transform: rotate(-3deg) scale(0.99);
+    }
+    100% {
+        transform: rotate(-2deg) scale(1);
+    }
+}
+
+@keyframes pin-bounce {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+.marker-content {
+    opacity: 1;
+    transform: scale(1);
+    transition:
+        opacity 0.4s var(--ease-out-expo),
+        transform 0.4s var(--ease-out-expo);
+
+    @starting-style {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .marker-content {
+        transition: opacity 0.2s ease-out;
+
+        @starting-style {
+            opacity: 0;
+            transform: scale(1);
+        }
+    }
+}
+
+@keyframes marker-pop {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    70% {
+        opacity: 1;
+        transform: scale(1.06);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
