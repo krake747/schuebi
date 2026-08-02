@@ -12,7 +12,7 @@ export function useShare() {
 
     const share = async (url: string) => {
         const shareData = {
-            title: "SchueberFouer Meeting Point",
+            title: "Schuebi",
             text: "Meet me here at the Schueberfouer!",
             url,
         }

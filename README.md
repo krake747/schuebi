@@ -1,4 +1,4 @@
-# Schuebi — SchueberFouer Meeting Point
+# Schuebi
 
 Drop a pin at the Schueberfouer and share your meeting point with your friends.
 

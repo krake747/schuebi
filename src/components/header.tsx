@@ -29,7 +29,7 @@ export function Header() {
                     aria-hidden
                 />
                 <div>
-                    <h1 className="text-base font-extrabold text-foreground">SchueberFouer Meeting Point</h1>
+                    <h1 className="text-base font-extrabold text-foreground">Schuebi · Meet Up</h1>
                     <p className="hidden text-xs text-muted-foreground [@media(min-height:600px)]:block">
                         Drop a pin and share it with your friends.
                     </p>

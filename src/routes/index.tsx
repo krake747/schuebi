@@ -59,7 +59,7 @@ const meetingSearchSchema = v.pipe(
 
 export const Route = createFileRoute("/")({
     validateSearch: meetingSearchSchema,
-    head: () => ({ meta: [{ title: "SchueberFouer Meeting Point" }] }),
+    head: () => ({ meta: [{ title: "Schuebi" }] }),
     component: MeetingPointPage,
 })
 

@@ -28,7 +28,7 @@ afterEach(() => {
 test("shows header, empty state and a visible map canvas", async () => {
     mountApp("/")
 
-    await expect.element(page.getByText("SchueberFouer Meeting Point")).toBeVisible()
+    await expect.element(page.getByText("Schuebi")).toBeVisible()
     await expect.element(page.getByText(/Tap the map to set a meeting point/)).toBeVisible()
     await expect.poll(() => document.querySelector(".maplibregl-canvas")).not.toBeNull()
 })
