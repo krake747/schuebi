@@ -4,7 +4,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "tsc -b && vite build",
+        "build": "tsc -b && vite build && cp node_modules/maplibre-gl/dist/maplibre-gl-worker.mjs dist/assets/",
         "dev": "vite",
         "fetch:geojson": "node scripts/fetch-geojson.mjs",
         "fmt": "oxfmt --no-error-on-unmatched-pattern",
