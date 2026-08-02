@@ -5,7 +5,9 @@ import { beautifyLabel, hasDescription, hasPhoto, type Attraction } from "@/data
 import { cn } from "@/lib/utils"
 import { AttractionIconView, getAttractionCircleColor } from "@/components/attraction-icon"
 import { BottomCard } from "@/components/bottom-card"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
 type AttractionPreviewProps = {
     attraction: Attraction
@@ -19,9 +21,9 @@ export function AttractionPreview({ attraction, onMeetHere, onClose }: Attractio
 
     return (
         <BottomCard>
-            <div className="mx-auto w-full max-w-md overflow-hidden rounded-3xl bg-card/95 shadow-2xl backdrop-blur">
+            <Card size="sm" className="mx-auto w-full max-w-md rounded-3xl bg-card/95 shadow-2xl backdrop-blur">
                 {showPhoto && (
-                    <div className="aspect-16/10 overflow-hidden bg-muted">
+                    <div className="-mt-4 aspect-16/10 bg-muted">
                         <img
                             src={attraction.photo}
                             alt={attraction.name}
@@ -31,7 +33,7 @@ export function AttractionPreview({ attraction, onMeetHere, onClose }: Attractio
                         />
                     </div>
                 )}
-                <div className="p-4">
+                <CardHeader className="gap-3">
                     <div className="flex items-start gap-3">
                         <AttractionIconView
                             attraction={attraction}
@@ -41,10 +43,10 @@ export function AttractionPreview({ attraction, onMeetHere, onClose }: Attractio
                             )}
                         />
                         <div className="min-w-0 flex-1">
-                            <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                            <CardDescription className="text-xs font-medium tracking-wide uppercase">
                                 {attraction.category}
-                            </p>
-                            <h2 className="text-base leading-tight font-semibold">{attraction.name}</h2>
+                            </CardDescription>
+                            <CardTitle className="text-lg leading-tight font-semibold">{attraction.name}</CardTitle>
                             {attraction.hours !== undefined && (
                                 <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
                                     <Clock className="size-3.5 shrink-0" aria-hidden />
@@ -52,11 +54,13 @@ export function AttractionPreview({ attraction, onMeetHere, onClose }: Attractio
                                 </p>
                             )}
                             {attraction.group !== undefined && (
-                                <span className="text-2xs mt-1 inline-block rounded-full bg-muted px-2 py-px font-medium text-muted-foreground">
+                                <Badge variant="secondary" className="text-2xs mt-1.5 h-auto rounded-full px-2 py-px">
                                     {beautifyLabel(attraction.group)}
-                                </span>
+                                </Badge>
                             )}
                         </div>
+                    </div>
+                    <CardAction>
                         <Button
                             variant="ghost"
                             size="icon-lg"
@@ -66,18 +70,18 @@ export function AttractionPreview({ attraction, onMeetHere, onClose }: Attractio
                         >
                             <X className="size-4" />
                         </Button>
-                    </div>
-                    <div className="mt-3 space-y-4">
-                        {hasDescription(attraction) && (
-                            <p className="text-sm text-muted-foreground">{attraction.description}</p>
-                        )}
-                        <Button className="w-full" onClick={() => onMeetHere(attraction)}>
-                            <MapPin className="size-4" aria-hidden />
-                            Meet here
-                        </Button>
-                    </div>
-                </div>
-            </div>
+                    </CardAction>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-4 pb-1">
+                    {hasDescription(attraction) && (
+                        <p className="text-sm text-muted-foreground">{attraction.description}</p>
+                    )}
+                    <Button className="w-full" onClick={() => onMeetHere(attraction)}>
+                        <MapPin className="size-4" aria-hidden />
+                        Meet here
+                    </Button>
+                </CardContent>
+            </Card>
         </BottomCard>
     )
 }

@@ -3,6 +3,7 @@ import { useState } from "react"
 import { beautifyLabel, hasDescription, hasPhoto, type Attraction } from "@/data/attractions"
 import { cn } from "@/lib/utils"
 import { AttractionIconView, getAttractionCircleColor } from "@/components/attraction-icon"
+import { Badge } from "@/components/ui/badge"
 
 type AttractionListItemProps = {
     attraction: Attraction
@@ -31,7 +32,8 @@ export function AttractionListItem({ attraction, active, onSelect, onGroupFilter
                     </span>
                 )}
                 {attraction.group !== undefined && (
-                    <span
+                    <Badge
+                        variant="ghost"
                         role="button"
                         tabIndex={0}
                         onClick={(e) => {
@@ -46,13 +48,13 @@ export function AttractionListItem({ attraction, active, onSelect, onGroupFilter
                             }
                         }}
                         className={cn(
-                            "text-2xs hit-area-3 mt-0.5 inline-block cursor-pointer rounded-full px-2 py-px font-medium transition-[color,background-color,transform] duration-150 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring active:scale-[0.97] active:duration-100",
-                            "bg-muted/70 text-muted-foreground hover:bg-muted",
+                            "text-2xs hit-area-3 mt-0.5 h-auto cursor-pointer rounded-full px-2 py-px font-medium transition-colors duration-150 select-none focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring active:scale-[0.97]",
+                            "bg-secondary text-secondary-foreground hover:bg-accent hover:text-accent-foreground",
                         )}
                         aria-label={`Filter by ${beautifyLabel(attraction.group)}`}
                     >
                         {beautifyLabel(attraction.group)}
-                    </span>
+                    </Badge>
                 )}
             </span>
         </button>

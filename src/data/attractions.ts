@@ -22,33 +22,33 @@ type CategoryStyle = {
 }
 
 const CATEGORY_STYLE: Record<string, CategoryStyle> = {
-    "sales booth": { label: "Stands", dot: "bg-sky-500", fill: "bg-sky-500 text-white hover:bg-sky-600" },
-    "games booth": { label: "Games", dot: "bg-sky-500", fill: "bg-sky-500 text-white hover:bg-sky-600" },
-    "shooting gallery": { label: "Shooting", dot: "bg-sky-500", fill: "bg-sky-500 text-white hover:bg-sky-600" },
-    "amusement arcade": { label: "Arcades", dot: "bg-sky-500", fill: "bg-sky-500 text-white hover:bg-sky-600" },
-    "candy shop": { label: "Candy", dot: "bg-amber-500", fill: "bg-amber-500 text-white hover:bg-amber-600" },
-    "sweet snacks": { label: "Sweet Treats", dot: "bg-amber-500", fill: "bg-amber-500 text-white hover:bg-amber-600" },
+    "sales booth": { label: "Stands", dot: "bg-sky-500", fill: "bg-sky-500 text-white" },
+    "games booth": { label: "Games", dot: "bg-sky-500", fill: "bg-sky-500 text-white" },
+    "shooting gallery": { label: "Shooting", dot: "bg-sky-500", fill: "bg-sky-500 text-white" },
+    "amusement arcade": { label: "Arcades", dot: "bg-sky-500", fill: "bg-sky-500 text-white" },
+    "candy shop": { label: "Candy", dot: "bg-amber-500", fill: "bg-amber-500 text-white" },
+    "sweet snacks": { label: "Sweet Treats", dot: "bg-amber-500", fill: "bg-amber-500 text-white" },
     "bar and snacks": {
         label: "Bar & Snacks",
         dot: "bg-emerald-500",
-        fill: "bg-emerald-500 text-white hover:bg-emerald-600",
+        fill: "bg-emerald-500 text-white",
     },
-    restaurant: { label: "Restaurants", dot: "bg-emerald-500", fill: "bg-emerald-500 text-white hover:bg-emerald-600" },
-    "kids-ride": { label: "Kids' Rides", dot: "bg-rose-500", fill: "bg-rose-500 text-white hover:bg-rose-600" },
-    ride: { label: "Thrill Rides", dot: "bg-rose-500", fill: "bg-rose-500 text-white hover:bg-rose-600" },
-    Toilets: { label: "Toilets", dot: "bg-violet-500", fill: "bg-violet-500 text-white hover:bg-violet-600" },
-    ATM: { label: "ATM", dot: "bg-violet-500", fill: "bg-violet-500 text-white hover:bg-violet-600" },
+    restaurant: { label: "Restaurants", dot: "bg-emerald-500", fill: "bg-emerald-500 text-white" },
+    "kids-ride": { label: "Kids' Rides", dot: "bg-rose-500", fill: "bg-rose-500 text-white" },
+    ride: { label: "Thrill Rides", dot: "bg-rose-500", fill: "bg-rose-500 text-white" },
+    Toilets: { label: "Toilets", dot: "bg-violet-500", fill: "bg-violet-500 text-white" },
+    ATM: { label: "ATM", dot: "bg-violet-500", fill: "bg-violet-500 text-white" },
     "Info & Safety": {
         label: "Info & Safety",
         dot: "bg-violet-500",
-        fill: "bg-violet-500 text-white hover:bg-violet-600",
+        fill: "bg-violet-500 text-white",
     },
 }
 
 const FALLBACK_STYLE: CategoryStyle = {
     label: "",
     dot: "bg-primary",
-    fill: "bg-primary text-primary-foreground hover:bg-primary/80",
+    fill: "bg-primary text-primary-foreground",
 }
 
 const FACILITY_CATEGORY: Record<string, string> = {

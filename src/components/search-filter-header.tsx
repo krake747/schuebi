@@ -1,7 +1,8 @@
 import { Search } from "lucide-react"
 import type { WheelEvent } from "react"
 
-import { Input } from "@/components/ui/input"
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { categoryStyle } from "@/data/attractions"
 import type { FilterController } from "@/utils/filters"
 import { cn } from "@/lib/utils"
@@ -25,46 +26,49 @@ export function SearchFilterHeader({ filter }: SearchFilterHeaderProps) {
     const { query, setQuery, allFilters, activeFilter, setActiveFilter } = filter
     return (
         <>
-            <div className="relative">
-                <Search
-                    className="absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground"
-                    aria-hidden
-                />
-                <Input
+            <InputGroup>
+                <InputGroupAddon align="inline-start">
+                    <Search aria-hidden />
+                </InputGroupAddon>
+                <InputGroupInput
                     value={query}
                     onChange={(event) => setQuery(event.target.value)}
                     placeholder="Search by name or type"
                     enterKeyHint="search"
-                    className="pl-8"
                     aria-label="Search places"
                 />
-            </div>
+            </InputGroup>
             <div
                 onWheel={translateWheelToScroll}
-                className="-my-3 flex thin-scrollbar scroll-fade-x gap-2 overflow-x-auto overflow-y-hidden py-3 max-sm:no-scrollbar"
-                role="group"
-                aria-label="Filter by type"
+                className="-my-3 flex thin-scrollbar scroll-fade-x overflow-x-auto overflow-y-hidden py-3 max-sm:no-scrollbar"
             >
-                {allFilters.map((f) => {
-                    const active = f.key === activeFilter
-                    const color = categoryStyle(f.key)
-                    return (
-                        <button
-                            key={f.key}
-                            type="button"
-                            onClick={() => setActiveFilter(active ? null : f.key)}
-                            aria-pressed={active}
-                            className={cn(
-                                "hit-area-y-3 flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium whitespace-nowrap transition-[color,background-color,transform] duration-150 outline-none focus-visible:ring-2 focus-visible:ring-ring/70 active:scale-[0.97] active:duration-100",
-                                active ? color.fill : "bg-muted/70 text-foreground hover:bg-muted",
-                            )}
-                        >
-                            <span className={cn("size-2 rounded-full", color.dot)} aria-hidden />
-                            {f.label}
-                            <span className={cn("text-2xs ml-1 opacity-60", active && "opacity-80")}>{f.count}</span>
-                        </button>
-                    )
-                })}
+                <ToggleGroup
+                    value={activeFilter === null ? [] : [activeFilter]}
+                    onValueChange={(next) => setActiveFilter(next[0] ?? null)}
+                    aria-label="Filter by type"
+                    className="w-max gap-2"
+                >
+                    {allFilters.map((f) => {
+                        const active = f.key === activeFilter
+                        const color = categoryStyle(f.key)
+                        return (
+                            <ToggleGroupItem
+                                key={f.key}
+                                value={f.key}
+                                className={cn(
+                                    "h-auto min-w-0 gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium transition-colors duration-150 outline-none select-none focus-visible:ring-2 focus-visible:ring-ring/70 active:scale-[0.97]",
+                                    active ? color.fill : "bg-secondary text-secondary-foreground hover:bg-accent",
+                                )}
+                            >
+                                <span className={cn("size-2 rounded-full", color.dot)} aria-hidden />
+                                {f.label}
+                                <span className={cn("text-2xs ml-1 opacity-60", active && "opacity-80")}>
+                                    {f.count}
+                                </span>
+                            </ToggleGroupItem>
+                        )
+                    })}
+                </ToggleGroup>
             </div>
         </>
     )
