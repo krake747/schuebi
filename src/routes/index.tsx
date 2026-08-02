@@ -140,12 +140,12 @@ function MeetingPointPage() {
                         <Button
                             type="button"
                             variant="secondary"
-                            size="lg"
+                            size="icon-lg"
+                            aria-label="Clear filters"
                             className="rounded-full text-destructive shadow-md hover:text-destructive"
                             onClick={filter.clearFilters}
                         >
                             <FilterX className="size-4" aria-hidden />
-                            Clear filters
                         </Button>
                     )}
                 </div>
