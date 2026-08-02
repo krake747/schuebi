@@ -2,7 +2,7 @@ import { Search } from "lucide-react"
 import type { WheelEvent } from "react"
 
 import { Input } from "@/components/ui/input"
-import { groupColor } from "@/utils/colors"
+import { categoryStyle } from "@/data/attractions"
 import type { FilterController } from "@/utils/filters"
 import { cn } from "@/lib/utils"
 
@@ -41,13 +41,13 @@ export function SearchFilterHeader({ filter }: SearchFilterHeaderProps) {
             </div>
             <div
                 onWheel={translateWheelToScroll}
-                className="-my-3 flex gap-2 overflow-x-auto overflow-y-hidden py-3 scroll-fade-x thin-scrollbar max-sm:no-scrollbar"
+                className="-my-3 flex thin-scrollbar scroll-fade-x gap-2 overflow-x-auto overflow-y-hidden py-3 max-sm:no-scrollbar"
                 role="group"
                 aria-label="Filter by type"
             >
                 {allFilters.map((f) => {
                     const active = f.key === activeFilter
-                    const color = groupColor(f.key)
+                    const color = categoryStyle(f.key)
                     return (
                         <button
                             key={f.key}
@@ -56,15 +56,10 @@ export function SearchFilterHeader({ filter }: SearchFilterHeaderProps) {
                             aria-pressed={active}
                             className={cn(
                                 "hit-area-y-3 flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium whitespace-nowrap transition-[color,background-color,transform] duration-150 outline-none focus-visible:ring-2 focus-visible:ring-ring/70 active:scale-[0.97] active:duration-100",
-                                active
-                                    ? color.fill
-                                    : "bg-muted/70 text-foreground hover:bg-muted",
+                                active ? color.fill : "bg-muted/70 text-foreground hover:bg-muted",
                             )}
                         >
-                            <span
-                                className={cn("size-2 rounded-full", color.dot)}
-                                aria-hidden
-                            />
+                            <span className={cn("size-2 rounded-full", color.dot)} aria-hidden />
                             {f.label}
                             <span className={cn("text-2xs ml-1 opacity-60", active && "opacity-80")}>{f.count}</span>
                         </button>

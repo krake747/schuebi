@@ -1,5 +1,5 @@
 import type { Attraction } from "@/data/attractions"
-import { beautifyLabel, facilityLabel } from "@/data/attractions"
+import { beautifyLabel, facilityCategory } from "@/data/attractions"
 import { ATTRACTIONS } from "@/data/attractions-generated"
 
 export type FilterOption = {
@@ -17,7 +17,7 @@ export type FilterController = {
 }
 
 function filterKey(attraction: Attraction): string {
-    return facilityLabel(attraction.group ?? attraction.category)
+    return facilityCategory(attraction.group ?? attraction.category)
 }
 
 export function buildFilters(): FilterOption[] {
