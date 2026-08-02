@@ -1,6 +1,6 @@
 import { MapPin } from "lucide-react"
 
-import { BottomCard } from "./bottom-card"
+import { BottomCard } from "@/components/bottom-card"
 
 export function EmptyState() {
     return (

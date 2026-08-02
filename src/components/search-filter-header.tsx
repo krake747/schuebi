@@ -1,6 +1,6 @@
 import { Search } from "lucide-react"
 
-import { Input } from "./ui/input"
+import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 import type { FilterController } from "@/utils/filters"
 

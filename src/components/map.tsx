@@ -12,7 +12,7 @@ import {
     MIN_ZOOM,
     type Basemap,
 } from "@/utils/maps"
-import { Map as MapLibreMap, type MapRef } from "./ui/map"
+import { Map as MapLibreMap, type MapRef } from "@/components/ui/map"
 
 type LatLng = {
     lat: number

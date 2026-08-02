@@ -1,7 +1,7 @@
 import { MapPin } from "lucide-react"
 
-import { Button } from "./ui/button"
-import { Separator } from "./ui/separator"
+import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
 import type { Attraction } from "@/data/attractions"
 
 type AttractionFooterProps = {

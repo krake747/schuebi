@@ -1,6 +1,6 @@
 import { type ReactNode } from "react"
 
-import { BottomCard } from "./bottom-card"
+import { BottomCard } from "@/components/bottom-card"
 
 type BottomSheetProps = {
     children: ReactNode

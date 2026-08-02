@@ -3,9 +3,9 @@ import { page } from "vitest/browser"
 import { createRoot, type Root } from "react-dom/client"
 import { afterEach, expect, test } from "vitest"
 
-import { routeTree } from "./routeTree.gen"
+import { routeTree } from "@/routeTree.gen"
 
-import "./index.css"
+import "@/index.css"
 
 let root: Root | null = null
 
