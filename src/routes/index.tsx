@@ -20,7 +20,7 @@ import { SearchFilterHeader } from "@/components/search-filter-header"
 import { ShareSheet } from "@/components/share-sheet"
 import { SlideUpPresence } from "@/components/slide-up-presence"
 import { Button } from "@/components/ui/button"
-import { MapMarker, MarkerContent, MarkerLabel, MarkerTooltip, useMap } from "@/components/ui/map"
+import { MapMarker, MarkerContent, MarkerTooltip, useMap } from "@/components/ui/map"
 import { ATTRACTIONS } from "@/data/attractions-generated"
 import { useMeetingPoint } from "@/hooks/use-meeting-point"
 import { cn } from "@/lib/utils"
@@ -111,21 +111,13 @@ function MeetingPointPage() {
                                     active={attraction.id === selection.selectedId}
                                     attraction={attraction}
                                 />
-                                {attraction.id === selection.selectedId && (
-                                    <MarkerLabel
-                                        position="top"
-                                        className="rounded-md bg-background/90 px-1.5 py-0.5 shadow-sm backdrop-blur"
-                                    >
-                                        {attraction.name}
-                                    </MarkerLabel>
-                                )}
                             </MarkerContent>
                             <MarkerTooltip offset={18}>{attraction.name}</MarkerTooltip>
                         </MapMarker>
                     ))}
                     <FlyToSelected id={selection.flyToId} />
                 </Map>
-                <div className="absolute top-20 left-3 z-10 flex gap-2">
+                <div className="absolute top-22 left-3 z-10 flex gap-2">
                     <Button
                         type="button"
                         variant="default"
@@ -153,7 +145,7 @@ function MeetingPointPage() {
                     type="button"
                     variant="secondary"
                     size="lg"
-                    className="absolute top-20 right-3 z-10 rounded-full shadow-md"
+                    className="absolute top-22 right-3 z-10 rounded-full shadow-md"
                     onClick={meeting.toggleBasemap}
                 >
                     <Layers className="size-4" aria-hidden />

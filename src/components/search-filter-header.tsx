@@ -1,8 +1,9 @@
 import { Search } from "lucide-react"
 
 import { Input } from "@/components/ui/input"
-import { cn } from "@/lib/utils"
+import { groupColor } from "@/utils/colors"
 import type { FilterController } from "@/utils/filters"
+import { cn } from "@/lib/utils"
 
 type SearchFilterHeaderProps = {
     filter: FilterController
@@ -33,6 +34,7 @@ export function SearchFilterHeader({ filter }: SearchFilterHeaderProps) {
             >
                 {allFilters.map((f) => {
                     const active = f.key === activeFilter
+                    const color = groupColor(f.key)
                     return (
                         <button
                             key={f.key}
@@ -40,12 +42,16 @@ export function SearchFilterHeader({ filter }: SearchFilterHeaderProps) {
                             onClick={() => setActiveFilter(active ? null : f.key)}
                             aria-pressed={active}
                             className={cn(
-                                "hit-area-y-3 shrink-0 rounded-full px-2.5 py-1 text-xs font-medium whitespace-nowrap transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring/70",
+                                "hit-area-y-3 flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium whitespace-nowrap transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring/70",
                                 active
-                                    ? "bg-primary text-primary-foreground"
+                                    ? color.fill
                                     : "bg-muted/70 text-foreground hover:bg-muted",
                             )}
                         >
+                            <span
+                                className={cn("size-2 rounded-full", color.dot)}
+                                aria-hidden
+                            />
                             {f.label}
                             <span className={cn("text-2xs ml-1 opacity-60", active && "opacity-80")}>{f.count}</span>
                         </button>

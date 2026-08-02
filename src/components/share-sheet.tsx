@@ -25,6 +25,7 @@ export function ShareSheet({ share, pin }: ShareSheetProps) {
                 <>
                     <Button
                         size="full"
+                        className="bg-emerald-500 text-white hover:bg-emerald-600"
                         render={
                             <a
                                 href={googleMapsDirectionsUrl(pin.lat, pin.lng)}
