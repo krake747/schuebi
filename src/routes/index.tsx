@@ -24,6 +24,7 @@ import { MapMarker, MarkerContent, MarkerTooltip, useMap } from "@/components/ui
 import { ATTRACTIONS } from "@/data/attractions-generated"
 import { useMeetingPoint } from "@/hooks/use-meeting-point"
 import { cn } from "@/lib/utils"
+import { groupColor } from "@/utils/colors"
 import { type Basemap } from "@/utils/maps"
 
 function toCoordinate(value: unknown, max: number): number | undefined {
@@ -76,6 +77,7 @@ function FlyToSelected({ id }: { id: string | null }) {
 }
 
 function AttractionPin({ active, attraction }: { active: boolean; attraction: (typeof ATTRACTIONS)[number] }) {
+    const color = groupColor(attraction.group ?? attraction.category).fill
     return (
         <AttractionIconView
             attraction={attraction}
@@ -83,7 +85,7 @@ function AttractionPin({ active, attraction }: { active: boolean; attraction: (t
                 "flex items-center justify-center rounded-full border-2 border-background shadow-md transition duration-150",
                 active
                     ? "size-8 scale-110 bg-primary text-primary-foreground ring-2 ring-primary/30 [&_svg]:size-4"
-                    : "size-6 bg-background text-foreground [&_svg]:size-3",
+                    : cn("size-6 text-white [&_svg]:size-3", color),
             )}
         />
     )
