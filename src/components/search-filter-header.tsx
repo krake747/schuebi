@@ -55,7 +55,7 @@ export function SearchFilterHeader({ filter }: SearchFilterHeaderProps) {
                             onClick={() => setActiveFilter(active ? null : f.key)}
                             aria-pressed={active}
                             className={cn(
-                                "hit-area-y-3 flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium whitespace-nowrap transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring/70",
+                                "hit-area-y-3 flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium whitespace-nowrap transition-[color,background-color,transform] duration-150 outline-none focus-visible:ring-2 focus-visible:ring-ring/70 active:scale-[0.97] active:duration-100",
                                 active
                                     ? color.fill
                                     : "bg-muted/70 text-foreground hover:bg-muted",

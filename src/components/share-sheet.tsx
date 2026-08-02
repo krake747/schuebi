@@ -1,4 +1,5 @@
 import { Navigation, Share2, Trash2 } from "lucide-react"
+import { motion } from "motion/react"
 
 import { BottomSheet } from "@/components/bottom-sheet"
 import { Button } from "@/components/ui/button"
@@ -40,7 +41,7 @@ export function ShareSheet({ share, pin }: ShareSheetProps) {
                     <div className="grid grid-cols-2 gap-2">
                         <Button size="full" variant="secondary" onClick={onShare}>
                             <Share2 className="size-5" aria-hidden />
-                            {copied ? "Link copied" : "Share Again"}
+                            <ShareLabel copied={copied} shareLabel="Share Again" />
                         </Button>
                         <ClearPin onClear={onClear} />
                     </div>
@@ -49,12 +50,25 @@ export function ShareSheet({ share, pin }: ShareSheetProps) {
                 <>
                     <Button size="full" onClick={onShare}>
                         <Share2 className="size-5" aria-hidden />
-                        {copied ? "Link copied" : "Share Meeting Point"}
+                        <ShareLabel copied={copied} shareLabel="Share Meeting Point" />
                     </Button>
                     <ClearPin onClear={onClear} />
                 </>
             )}
         </BottomSheet>
+    )
+}
+
+function ShareLabel({ copied, shareLabel }: { copied: boolean; shareLabel: string }) {
+    return (
+        <motion.span
+            key={copied ? "copied" : "share"}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.2, ease: [0.19, 1, 0.22, 1] }}
+        >
+            {copied ? "Link copied" : shareLabel}
+        </motion.span>
     )
 }
 

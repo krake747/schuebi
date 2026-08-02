@@ -43,7 +43,7 @@ export function AttractionListItem({
               if (onGroupFilter !== undefined) onGroupFilter(attraction.group!);
             }}
             className={cn(
-              "text-2xs hit-area-3 mt-0.5 inline-block rounded-full px-2 py-px font-medium transition-colors",
+              "text-2xs hit-area-3 mt-0.5 inline-block rounded-full px-2 py-px font-medium transition-[color,background-color,transform] duration-150 active:scale-[0.97] active:duration-100",
               "bg-muted/70 text-muted-foreground hover:bg-muted",
             )}
           >
