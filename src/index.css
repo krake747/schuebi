@@ -264,6 +264,25 @@
     }
 }
 
+@utility thin-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+
+    &::-webkit-scrollbar {
+        height: 6px;
+    }
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 9999px;
+        background-color: var(--color-border);
+    }
+    &::-webkit-scrollbar-thumb:hover {
+        background-color: var(--color-muted-foreground);
+    }
+}
+
 @utility hit-area-y-* {
     position: relative;
     --hit-area-t: --spacing(--value(number) * -1);

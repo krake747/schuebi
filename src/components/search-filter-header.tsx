@@ -1,4 +1,5 @@
 import { Search } from "lucide-react"
+import type { WheelEvent } from "react"
 
 import { Input } from "@/components/ui/input"
 import { groupColor } from "@/utils/colors"
@@ -7,6 +8,17 @@ import { cn } from "@/lib/utils"
 
 type SearchFilterHeaderProps = {
     filter: FilterController
+}
+
+function translateWheelToScroll(event: WheelEvent<HTMLDivElement>) {
+    const element = event.currentTarget
+    const maxScroll = element.scrollWidth - element.clientWidth
+    if (maxScroll <= 0 || event.deltaY === 0) return
+    const next = element.scrollLeft + event.deltaY
+    if (next > 0 && next < maxScroll) {
+        event.preventDefault()
+        element.scrollLeft = next
+    }
 }
 
 export function SearchFilterHeader({ filter }: SearchFilterHeaderProps) {
@@ -28,7 +40,8 @@ export function SearchFilterHeader({ filter }: SearchFilterHeaderProps) {
                 />
             </div>
             <div
-                className="-my-3 flex gap-2 overflow-x-auto overflow-y-hidden py-3 scroll-fade-x no-scrollbar"
+                onWheel={translateWheelToScroll}
+                className="-my-3 flex gap-2 overflow-x-auto overflow-y-hidden py-3 scroll-fade-x thin-scrollbar max-sm:no-scrollbar"
                 role="group"
                 aria-label="Filter by type"
             >
