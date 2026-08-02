@@ -26,7 +26,11 @@ export function SearchFilterHeader({ filter }: SearchFilterHeaderProps) {
                     aria-label="Search places"
                 />
             </div>
-            <div className="mt-3 flex flex-wrap gap-x-2 gap-y-1.5" role="group" aria-label="Filter by type">
+            <div
+                className="-my-3 flex gap-2 overflow-x-auto overflow-y-hidden py-3 scroll-fade-x no-scrollbar"
+                role="group"
+                aria-label="Filter by type"
+            >
                 {allFilters.map((f) => {
                     const active = f.key === activeFilter
                     return (
@@ -36,7 +40,7 @@ export function SearchFilterHeader({ filter }: SearchFilterHeaderProps) {
                             onClick={() => setActiveFilter(active ? null : f.key)}
                             aria-pressed={active}
                             className={cn(
-                                "hit-area-y-3 rounded-full px-2.5 py-1 text-xs font-medium whitespace-nowrap transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring/70",
+                                "hit-area-y-3 shrink-0 rounded-full px-2.5 py-1 text-xs font-medium whitespace-nowrap transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring/70",
                                 active
                                     ? "bg-primary text-primary-foreground"
                                     : "bg-muted/70 text-foreground hover:bg-muted",

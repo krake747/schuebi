@@ -15,7 +15,7 @@ type AttractionsSheetProps = {
 export function AttractionsSheet({ control, description, header, children }: AttractionsSheetProps) {
     return (
         <Drawer open={control.open} onOpenChange={control.onOpenChange} showSwipeHandle>
-            <DrawerContent className="h-[65dvh] max-h-[75dvh]">
+            <DrawerContent className="h-[80dvh] max-h-[90dvh]">
                 <DrawerClose
                     render={<Button variant="ghost" className="hit-area-[2px] absolute top-4 right-4" size="icon-lg" />}
                 >
