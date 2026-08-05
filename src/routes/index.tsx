@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { FilterX, Search, SlidersHorizontal } from "lucide-react"
+import { FilterX, Heart, Search, SlidersHorizontal } from "lucide-react"
 
 import { GithubIcon } from "@/components/github-icon"
 import type { Map as MapLibreMap } from "maplibre-gl"
@@ -27,6 +27,7 @@ import { useMeetingPoint } from "@/hooks/use-meeting-point"
 import { cn } from "@/lib/utils"
 import { categoryStyle, facilityCategory } from "@/data/attractions"
 import { useFilters } from "@/store/use-filters"
+import { useFavourites } from "@/store/use-favourites"
 
 function toCoordinate(value: unknown, max: number): number | undefined {
     if (typeof value === "string") {
@@ -75,18 +76,41 @@ function FlyToSelected({ id }: { id: string | null }) {
     return null
 }
 
-function AttractionPin({ active, attraction }: { active: boolean; attraction: (typeof ATTRACTIONS)[number] }) {
+function AttractionPin({
+    active,
+    attraction,
+    favourited,
+}: {
+    active: boolean
+    attraction: (typeof ATTRACTIONS)[number]
+    favourited: boolean
+}) {
     const color = categoryStyle(facilityCategory(attraction.group ?? attraction.category)).fill
     return (
-        <AttractionIconView
-            attraction={attraction}
-            className={cn(
-                "flex items-center justify-center rounded-full border-2 border-background shadow-md transition duration-150",
-                active
-                    ? "size-8 scale-110 bg-primary text-primary-foreground ring-2 ring-primary/30 [&_svg]:size-4"
-                    : cn("size-6 text-white [&_svg]:size-3", color),
+        <span className="relative">
+            <AttractionIconView
+                attraction={attraction}
+                className={cn(
+                    "flex items-center justify-center rounded-full border-2 border-background shadow-md transition duration-150",
+                    active
+                        ? "size-8 scale-110 bg-primary text-primary-foreground ring-2 ring-primary/30 [&_svg]:size-4"
+                        : cn("size-6 text-white [&_svg]:size-3", color),
+                )}
+            />
+            {favourited && (
+                <span
+                    aria-hidden
+                    className={cn(
+                        "absolute flex items-center justify-center rounded-full bg-rose-500 text-white ring-1 ring-background",
+                        active
+                            ? "-top-1.5 -right-1.5 size-3.5 [&_svg]:size-2.5"
+                            : "-top-1 -right-1 size-3 [&_svg]:size-2",
+                    )}
+                >
+                    <Heart className="fill-current" />
+                </span>
             )}
-        />
+        </span>
     )
 }
 
@@ -97,6 +121,7 @@ function MeetingPointPage() {
     const { filter, selection, share, sheet, pin } = meeting
     const open = useFilters((state) => state.open)
     const setFiltersOpen = useFilters((state) => state.setOpen)
+    const favouriteIds = new Set(useFavourites((state) => state.ids))
 
     return (
         <div className="relative h-dvh bg-muted">
@@ -112,6 +137,7 @@ function MeetingPointPage() {
                                 <AttractionPin
                                     active={attraction.id === selection.selectedId}
                                     attraction={attraction}
+                                    favourited={favouriteIds.has(attraction.id)}
                                 />
                             </MarkerContent>
                             <MarkerTooltip offset={18}>{attraction.name}</MarkerTooltip>
