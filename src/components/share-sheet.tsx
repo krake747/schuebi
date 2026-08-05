@@ -25,8 +25,8 @@ export function ShareSheet({ share, pin }: ShareSheetProps) {
             {mode === "shared" ? (
                 <>
                     <Button
-                        size="full"
-                        className="bg-emerald-500 text-white hover:bg-emerald-600"
+                        size="lg"
+                        className="w-full bg-emerald-500 text-white hover:bg-emerald-600"
                         render={
                             <a
                                 href={googleMapsDirectionsUrl(pin.lat, pin.lng)}
@@ -39,7 +39,7 @@ export function ShareSheet({ share, pin }: ShareSheetProps) {
                         Navigate
                     </Button>
                     <div className="grid grid-cols-2 gap-2">
-                        <Button size="full" variant="secondary" onClick={onShare}>
+                        <Button size="lg" variant="secondary" className="w-full" onClick={onShare}>
                             <Share2 className="size-5" aria-hidden />
                             <ShareLabel copied={copied} shareLabel="Share Again" />
                         </Button>
@@ -48,7 +48,7 @@ export function ShareSheet({ share, pin }: ShareSheetProps) {
                 </>
             ) : (
                 <>
-                    <Button size="full" onClick={onShare}>
+                    <Button size="lg" className="w-full" onClick={onShare}>
                         <Share2 className="size-5" aria-hidden />
                         <ShareLabel copied={copied} shareLabel="Share Meeting Point" />
                     </Button>
@@ -74,7 +74,7 @@ function ShareLabel({ copied, shareLabel }: { copied: boolean; shareLabel: strin
 
 function ClearPin({ onClear }: { onClear: () => void }) {
     return (
-        <Button size="full" variant="secondary" onClick={onClear}>
+        <Button size="lg" variant="secondary" className="w-full" onClick={onClear}>
             <Trash2 className="size-5" aria-hidden />
             Clear Pin
         </Button>

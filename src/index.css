@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/inter";
+@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -150,6 +151,12 @@
     }
     .maplibregl-ctrl-group {
         @apply top-auto! right-3! bottom-20! left-auto!;
+    }
+    body {
+        @apply bg-background text-foreground;
+    }
+    html {
+        @apply font-sans;
     }
 }
 

@@ -632,7 +632,7 @@ function MarkerPopup({ children, className, closeButton = false, ...popupOptions
         <div
             className={cn(
                 "relative max-w-62 rounded-md border bg-popover p-3 text-popover-foreground shadow-md",
-                "animate-in fade-in-0 zoom-in-95 duration-200 ease-out-expo",
+                "animate-in duration-200 ease-out-expo fade-in-0 zoom-in-95",
                 className,
             )}
         >
@@ -700,7 +700,7 @@ function MarkerTooltip({ children, className, ...popupOptions }: MarkerTooltipPr
         <div
             className={cn(
                 "pointer-events-none rounded-md bg-foreground px-2 py-1 text-xs text-balance text-background shadow-md",
-                "animate-in fade-in-0 zoom-in-95 duration-200 ease-out-expo",
+                "animate-in duration-200 ease-out-expo fade-in-0 zoom-in-95",
                 className,
             )}
         >
@@ -1015,7 +1015,7 @@ function MapPopup({
         <div
             className={cn(
                 "relative max-w-62 rounded-md border bg-popover p-3 text-popover-foreground shadow-md",
-                "animate-in fade-in-0 zoom-in-95 duration-200 ease-out-expo",
+                "animate-in duration-200 ease-out-expo fade-in-0 zoom-in-95",
                 className,
             )}
         >
