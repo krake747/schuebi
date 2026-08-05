@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { FilterX, Search } from "lucide-react"
+import { FilterX, Search, SlidersHorizontal } from "lucide-react"
 
 import { GithubIcon } from "@/components/github-icon"
 import type { Map as MapLibreMap } from "maplibre-gl"
@@ -12,11 +12,12 @@ import { AttractionIconView } from "@/components/attraction-icon"
 import { AttractionList } from "@/components/attraction-list"
 import { AttractionsSheet } from "@/components/attractions-sheet"
 import { AttractionPreview } from "@/components/attraction-preview"
+import { AttractionSearch } from "@/components/attraction-search"
 import { EmptyState } from "@/components/empty-state"
+import { FilterDrawer } from "@/components/filter-drawer"
 import { Header } from "@/components/header"
 import { Map } from "@/components/map"
 import { MapPin } from "@/components/map-pin"
-import { SearchFilterHeader } from "@/components/search-filter-header"
 import { ShareSheet } from "@/components/share-sheet"
 import { SlideUpPresence } from "@/components/slide-up-presence"
 import { Button } from "@/components/ui/button"
@@ -25,6 +26,7 @@ import { ATTRACTIONS } from "@/data/attractions-generated"
 import { useMeetingPoint } from "@/hooks/use-meeting-point"
 import { cn } from "@/lib/utils"
 import { categoryStyle, facilityCategory } from "@/data/attractions"
+import { useFilters } from "@/store/use-filters"
 
 function toCoordinate(value: unknown, max: number): number | undefined {
     if (typeof value === "string") {
@@ -93,6 +95,8 @@ function MeetingPointPage() {
     const [map, setMap] = useState<MapLibreMap | null>(null)
     const meeting = useMeetingPoint(search, map)
     const { filter, selection, share, sheet, pin } = meeting
+    const open = useFilters((state) => state.open)
+    const setFiltersOpen = useFilters((state) => state.setOpen)
 
     return (
         <div className="relative h-dvh bg-muted">
@@ -115,7 +119,7 @@ function MeetingPointPage() {
                     ))}
                     <FlyToSelected id={selection.flyToId} />
                 </Map>
-                <div className="absolute top-20 left-3 z-10 flex gap-2 [@media(min-height:600px)]:top-22">
+                <div className="absolute top-20 left-3 z-10 flex items-center gap-2 [@media(min-height:600px)]:top-22">
                     <Button
                         type="button"
                         variant="default"
@@ -125,6 +129,17 @@ function MeetingPointPage() {
                     >
                         <Search className="size-4" aria-hidden />
                         Find places
+                    </Button>
+                    <Button
+                        type="button"
+                        variant="secondary"
+                        size="icon-lg"
+                        aria-label="Filters"
+                        aria-pressed={open}
+                        className="rounded-full shadow-md"
+                        onClick={() => setFiltersOpen(true)}
+                    >
+                        <SlidersHorizontal className="size-4" aria-hidden />
                     </Button>
                     {filter.hasActiveFilters && (
                         <Button
@@ -177,17 +192,17 @@ function MeetingPointPage() {
                 <AttractionsSheet
                     control={{ open: sheet.open, onOpenChange: sheet.setOpen }}
                     description={`${meeting.filtered.length} ${meeting.filtered.length === 1 ? "place" : "places"} around the Glacis`}
-                    header={<SearchFilterHeader filter={filter} />}
+                    header={<AttractionSearch />}
                 >
                     <AttractionList
                         attractions={meeting.filtered}
                         selection={{ selectedId: selection.selectedId, onSelect: selection.selectAttraction }}
-                        onGroupFilter={filter.setActiveFilter}
                     />
                     {selection.selected !== null && (
                         <AttractionFooter attraction={selection.selected} onMeetHere={meeting.handleMeetHere} />
                     )}
                 </AttractionsSheet>
+                <FilterDrawer />
                 <p aria-live="polite" className="sr-only">
                     {selection.selected !== null
                         ? `${selection.selected.name} selected`

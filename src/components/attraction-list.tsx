@@ -6,10 +6,9 @@ import type { Attraction } from "@/data/attractions"
 type AttractionListProps = {
     attractions: Attraction[]
     selection: { selectedId: string | null; onSelect: (id: string) => void }
-    onGroupFilter: ((group: string) => void) | undefined
 }
 
-export function AttractionList({ attractions, selection, onGroupFilter }: AttractionListProps) {
+export function AttractionList({ attractions, selection }: AttractionListProps) {
     const itemRefs = useRef(new Map<string, HTMLLIElement>())
     const { selectedId, onSelect } = selection
 
@@ -42,7 +41,6 @@ export function AttractionList({ attractions, selection, onGroupFilter }: Attrac
                             attraction={attraction}
                             active={attraction.id === selectedId}
                             onSelect={onSelect}
-                            onGroupFilter={onGroupFilter}
                         />
                     </li>
                 ))}

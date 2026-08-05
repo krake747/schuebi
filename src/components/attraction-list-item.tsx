@@ -4,15 +4,16 @@ import { beautifyLabel, hasDescription, hasPhoto, type Attraction } from "@/data
 import { cn } from "@/lib/utils"
 import { AttractionIconView, getAttractionCircleColor } from "@/components/attraction-icon"
 import { Badge } from "@/components/ui/badge"
+import { useFilters } from "@/store/use-filters"
 
 type AttractionListItemProps = {
     attraction: Attraction
     active: boolean
     onSelect: (id: string) => void
-    onGroupFilter: ((group: string) => void) | undefined
 }
 
-export function AttractionListItem({ attraction, active, onSelect, onGroupFilter }: AttractionListItemProps) {
+export function AttractionListItem({ attraction, active, onSelect }: AttractionListItemProps) {
+    const toggle = useFilters((state) => state.toggle)
     return (
         <button
             type="button"
@@ -38,13 +39,13 @@ export function AttractionListItem({ attraction, active, onSelect, onGroupFilter
                         tabIndex={0}
                         onClick={(e) => {
                             e.stopPropagation()
-                            if (onGroupFilter !== undefined) onGroupFilter(attraction.group!)
+                            toggle(attraction.group!)
                         }}
                         onKeyDown={(e) => {
-                            if ((e.key === "Enter" || e.key === " ") && onGroupFilter !== undefined) {
+                            if (e.key === "Enter" || e.key === " ") {
                                 e.preventDefault()
                                 e.stopPropagation()
-                                onGroupFilter(attraction.group!)
+                                toggle(attraction.group!)
                             }
                         }}
                         className={cn(

@@ -8,14 +8,6 @@ export type FilterOption = {
     count: number
 }
 
-export type FilterController = {
-    query: string
-    setQuery: (value: string) => void
-    activeFilter: string | null
-    setActiveFilter: (key: string | null) => void
-    allFilters: FilterOption[]
-}
-
 function filterKey(attraction: Attraction): string {
     return facilityCategory(attraction.group ?? attraction.category)
 }
@@ -35,7 +27,7 @@ export function buildFilters(): FilterOption[] {
         .toSorted((a, b) => b.count - a.count)
 }
 
-export function filterAttractions(query: string, activeFilter: string | null): Attraction[] {
+export function filterAttractions(query: string, activeFilters: readonly string[]): Attraction[] {
     const q = query.trim().toLowerCase()
     return ATTRACTIONS.filter((attraction) => {
         const matchesQuery =
@@ -45,7 +37,7 @@ export function filterAttractions(query: string, activeFilter: string | null): A
             attraction.category.toLowerCase().includes(q) ||
             (attraction.group !== undefined && attraction.group.toLowerCase().includes(q))
         if (!matchesQuery) return false
-        if (activeFilter === null) return true
-        return filterKey(attraction) === activeFilter
+        if (activeFilters.length === 0) return true
+        return activeFilters.includes(filterKey(attraction))
     })
 }

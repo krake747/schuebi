@@ -6,7 +6,8 @@ import type { Attraction } from "@/data/attractions"
 import { ATTRACTIONS } from "@/data/attractions-generated"
 import { roundCoordinate } from "@/utils/maps"
 import { buildShareUrl } from "@/utils/share"
-import { buildFilters, filterAttractions } from "@/utils/filters"
+import { filterAttractions } from "@/utils/filters"
+import { hasActiveFilters, useFilters } from "@/store/use-filters"
 import { useShare } from "./use-share"
 
 export function useMeetingPoint(search: { lat: number | undefined; lng: number | undefined }, map: MapLibreMap | null) {
@@ -14,17 +15,17 @@ export function useMeetingPoint(search: { lat: number | undefined; lng: number |
     const { share, copied } = useShare()
     const pin = search.lat !== undefined && search.lng !== undefined ? { lat: search.lat, lng: search.lng } : null
     const [mode, setMode] = useState<"create" | "shared">(() => (pin === null ? "create" : "shared"))
-    const [query, setQuery] = useState("")
-    const [activeFilter, setActiveFilter] = useState<string | null>(null)
     const [selectedId, setSelectedId] = useState<string | null>(null)
     const [flyToId, setFlyToId] = useState<string | null>(null)
     const [sheetOpen, setSheetOpen] = useState(false)
 
-    const allFilters = useMemo(buildFilters, [])
+    const query = useFilters((state) => state.query)
+    const selected = useFilters((state) => state.selected)
+    const clearFilters = useFilters((state) => state.clear)
 
-    const selected =
+    const selectedAttraction =
         selectedId === null ? null : (ATTRACTIONS.find((attraction) => attraction.id === selectedId) ?? null)
-    const filtered = filterAttractions(query, activeFilter)
+    const filtered = useMemo(() => filterAttractions(query, selected), [query, selected])
 
     const selectAttraction = (id: string) => {
         setSelectedId(id)
@@ -32,13 +33,6 @@ export function useMeetingPoint(search: { lat: number | undefined; lng: number |
     }
 
     const clearSelection = () => setSelectedId(null)
-
-    const handleFilterChange = (next: string | null) => setActiveFilter(next)
-
-    const clearFilters = () => {
-        setQuery("")
-        setActiveFilter(null)
-    }
 
     const setPin = (lat: number, lng: number) => {
         setSelectedId(null)
@@ -74,16 +68,8 @@ export function useMeetingPoint(search: { lat: number | undefined; lng: number |
         handleTap,
         handleMeetHere,
         share: { mode, copied, onShare: handleShare, onClear: handleClear },
-        selection: { selectedId, flyToId, selected, selectAttraction, clearSelection },
-        filter: {
-            query,
-            setQuery,
-            activeFilter,
-            setActiveFilter: handleFilterChange,
-            allFilters,
-            clearFilters,
-            hasActiveFilters: query.trim() !== "" || activeFilter !== null,
-        },
+        selection: { selectedId, flyToId, selected: selectedAttraction, selectAttraction, clearSelection },
+        filter: { clearFilters, hasActiveFilters: hasActiveFilters(query, selected) },
         sheet: { open: sheetOpen, setOpen: setSheetOpen },
     }
 }
