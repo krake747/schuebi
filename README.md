@@ -8,7 +8,6 @@ Drop a pin at the Schueberfouer and share your meeting point with your friends.
 - Drop a pin anywhere on the map to set your meeting point
 - Share the location via URL or the Web Share API
 - Search and filter attractions by category
-- Toggle between roadmap and satellite basemaps
 
 ## Stack
 
@@ -26,7 +25,7 @@ Other useful scripts: `pnpm build`, `pnpm lint`, `pnpm preview`.
 ## Data sources
 
 - Attractions from the Ville de Luxembourg ArcGIS FeatureServer (`maps.vdl.lu`)
-- Basemaps from `geoportail.lu` (orthophoto 2025, CC0)
+- Map tiles from `geoportail.lu` (roadmap style)
 
 Regenerate the attractions data with `pnpm fetch:geojson` and `pnpm generate:attractions`.
 

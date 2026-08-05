@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { FilterX, Layers, Search } from "lucide-react"
+import { FilterX, Search } from "lucide-react"
 
 import { GithubIcon } from "@/components/github-icon"
 import type { Map as MapLibreMap } from "maplibre-gl"
@@ -25,7 +25,6 @@ import { ATTRACTIONS } from "@/data/attractions-generated"
 import { useMeetingPoint } from "@/hooks/use-meeting-point"
 import { cn } from "@/lib/utils"
 import { categoryStyle, facilityCategory } from "@/data/attractions"
-import { type Basemap } from "@/utils/maps"
 
 function toCoordinate(value: unknown, max: number): number | undefined {
     if (typeof value === "string") {
@@ -43,7 +42,6 @@ const meetingSearchSchema = v.pipe(
     v.object({
         lat: v.optional(v.unknown()),
         lng: v.optional(v.unknown()),
-        basemap: v.optional(v.unknown()),
     }),
     v.transform((search) => {
         const lat = toCoordinate(search.lat, 90)
@@ -52,7 +50,6 @@ const meetingSearchSchema = v.pipe(
         return {
             lat: hasCoordinates ? lat : undefined,
             lng: hasCoordinates ? lng : undefined,
-            basemap: (search.basemap === "satellite" ? "satellite" : "road") as Basemap,
         }
     }),
 )
@@ -93,7 +90,6 @@ function AttractionPin({ active, attraction }: { active: boolean; attraction: (t
 
 function MeetingPointPage() {
     const search = Route.useSearch()
-    const basemap = search.basemap === "satellite" ? "satellite" : "road"
     const [map, setMap] = useState<MapLibreMap | null>(null)
     const meeting = useMeetingPoint(search, map)
     const { filter, selection, share, sheet, pin } = meeting
@@ -101,7 +97,7 @@ function MeetingPointPage() {
     return (
         <div className="relative h-dvh bg-muted">
             <main className="absolute inset-0 overflow-hidden">
-                <Map initialCenter={meeting.pin} onTap={meeting.handleTap} onReady={setMap} basemap={basemap}>
+                <Map initialCenter={meeting.pin} onTap={meeting.handleTap} onReady={setMap}>
                     {meeting.filtered.map((attraction) => (
                         <MapMarker
                             key={attraction.id}
@@ -143,16 +139,6 @@ function MeetingPointPage() {
                         </Button>
                     )}
                 </div>
-                <Button
-                    type="button"
-                    variant="secondary"
-                    size="lg"
-                    className="absolute top-20 right-3 z-10 rounded-full shadow-md [@media(min-height:600px)]:top-22"
-                    onClick={meeting.toggleBasemap}
-                >
-                    <Layers className="size-4" aria-hidden />
-                    {basemap === "road" ? "Satellite" : "Map"}
-                </Button>
                 <Button
                     render={
                         <a

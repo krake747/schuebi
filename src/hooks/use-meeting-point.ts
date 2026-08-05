@@ -4,15 +4,12 @@ import { useMemo, useState } from "react"
 
 import type { Attraction } from "@/data/attractions"
 import { ATTRACTIONS } from "@/data/attractions-generated"
-import { type Basemap, roundCoordinate } from "@/utils/maps"
+import { roundCoordinate } from "@/utils/maps"
 import { buildShareUrl } from "@/utils/share"
 import { buildFilters, filterAttractions } from "@/utils/filters"
 import { useShare } from "./use-share"
 
-export function useMeetingPoint(
-    search: { lat: number | undefined; lng: number | undefined; basemap: Basemap },
-    map: MapLibreMap | null,
-) {
+export function useMeetingPoint(search: { lat: number | undefined; lng: number | undefined }, map: MapLibreMap | null) {
     const navigate = useNavigate()
     const { share, copied } = useShare()
     const pin = search.lat !== undefined && search.lng !== undefined ? { lat: search.lat, lng: search.lng } : null
@@ -48,19 +45,10 @@ export function useMeetingPoint(
         setMode("create")
         void navigate({
             to: "/",
-            search: { lat: roundCoordinate(lat), lng: roundCoordinate(lng), basemap: search.basemap },
+            search: { lat: roundCoordinate(lat), lng: roundCoordinate(lng) },
             replace: true,
         })
         map?.flyTo({ center: [lng, lat], zoom: Math.max(map.getZoom(), 16), duration: 500, essential: true })
-    }
-
-    const toggleBasemap = () => {
-        const next: Basemap = search.basemap === "road" ? "satellite" : "road"
-        void navigate({
-            to: "/",
-            search: { ...(pin === null ? {} : { lat: pin.lat, lng: pin.lng }), basemap: next },
-            replace: true,
-        })
     }
 
     const handleTap = (lat: number, lng: number) => setPin(lat, lng)
@@ -72,7 +60,7 @@ export function useMeetingPoint(
 
     const handleShare = () => {
         if (pin === null) return
-        void share(buildShareUrl(pin.lat, pin.lng, search.basemap))
+        void share(buildShareUrl(pin.lat, pin.lng))
     }
 
     const handleMeetHere = (attraction: Attraction) => {
@@ -84,7 +72,6 @@ export function useMeetingPoint(
         pin,
         filtered,
         handleTap,
-        toggleBasemap,
         handleMeetHere,
         share: { mode, copied, onShare: handleShare, onClear: handleClear },
         selection: { selectedId, flyToId, selected, selectAttraction, clearSelection },

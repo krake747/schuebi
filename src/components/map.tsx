@@ -2,16 +2,7 @@ import { type Map as MaplibreMap, type MapMouseEvent } from "maplibre-gl"
 import { type ReactNode, useEffect, useEffectEvent, useState } from "react"
 import { Loader2 } from "lucide-react"
 
-import { useBasemapOverlay } from "@/hooks/use-basemap-overlay"
-import {
-    GLACIS_BOUNDS,
-    GLACIS_CENTER,
-    INITIAL_ZOOM,
-    MAP_STYLE_URL,
-    MAX_ZOOM,
-    MIN_ZOOM,
-    type Basemap,
-} from "@/utils/maps"
+import { GLACIS_BOUNDS, GLACIS_CENTER, INITIAL_ZOOM, MAP_STYLE_URL, MAX_ZOOM, MIN_ZOOM } from "@/utils/maps"
 import { Map as MapLibreMap, type MapRef } from "@/components/ui/map"
 
 type LatLng = {
@@ -23,11 +14,10 @@ type MapProps = {
     initialCenter: LatLng | null
     onTap: (lat: number, lng: number) => void
     onReady: (map: MaplibreMap) => void
-    basemap?: Basemap
     children?: ReactNode
 }
 
-export function Map({ initialCenter, onTap, onReady, basemap = "road", children }: MapProps) {
+export function Map({ initialCenter, onTap, onReady, children }: MapProps) {
     const [map, setMap] = useState<MapRef | null>(null)
     const [isLoaded, setIsLoaded] = useState(false)
     const handleTap = useEffectEvent((event: MapMouseEvent) => {
@@ -52,8 +42,6 @@ export function Map({ initialCenter, onTap, onReady, basemap = "road", children 
             map.off("style.load", handleLoaded)
         }
     }, [map])
-
-    useBasemapOverlay(map, basemap)
 
     return (
         <div className="relative h-full">
