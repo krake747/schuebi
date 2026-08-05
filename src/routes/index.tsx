@@ -119,7 +119,7 @@ function MeetingPointPage() {
                     ))}
                     <FlyToSelected id={selection.flyToId} />
                 </Map>
-                <div className="absolute top-22 left-3 z-10 flex gap-2">
+                <div className="absolute top-20 left-3 z-10 flex gap-2 [@media(min-height:600px)]:top-22">
                     <Button
                         type="button"
                         variant="default"
@@ -147,7 +147,7 @@ function MeetingPointPage() {
                     type="button"
                     variant="secondary"
                     size="lg"
-                    className="absolute top-22 right-3 z-10 rounded-full shadow-md"
+                    className="absolute top-20 right-3 z-10 rounded-full shadow-md [@media(min-height:600px)]:top-22"
                     onClick={meeting.toggleBasemap}
                 >
                     <Layers className="size-4" aria-hidden />

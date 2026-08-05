@@ -16,7 +16,7 @@ export function Header() {
         <header className="pointer-events-none absolute inset-x-0 top-0 z-20 flex justify-center px-4 pt-[max(0.75rem,env(safe-area-inset-top))] pb-2">
             <div
                 className={cn(
-                    "pointer-events-auto flex -rotate-2 items-center gap-2 rounded-[0.9rem] border-[2.5px] border-dashed border-primary bg-background px-4.5 py-2.5 shadow-[4px_6px_0_oklch(0.6_0.15_15/0.35),6px_10px_18px_rgb(0_0_0/0.18)]",
+                    "pointer-events-auto flex -rotate-2 items-center gap-2 rounded-[0.9rem] border-[2.5px] border-dashed border-primary bg-background px-4.5 py-2 shadow-[4px_6px_0_oklch(0.6_0.15_15/0.35),6px_10px_18px_rgb(0_0_0/0.18)]",
                     !visited && "motion-safe:animate-sticker-pop motion-reduce:animate-fade-in",
                 )}
             >

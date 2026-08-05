@@ -19,7 +19,7 @@ export function AttractionListItem({ attraction, active, onSelect, onGroupFilter
             onClick={() => onSelect(attraction.id)}
             aria-current={active}
             className={cn(
-                "flex w-full items-start gap-3 rounded-xl p-2.5 text-left transition-colors outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring/70",
+                "flex w-full items-start gap-3 rounded-xl p-2 text-left transition-colors outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring/70",
                 active && "bg-accent",
             )}
         >
@@ -70,7 +70,7 @@ function AttractionThumbnail({ attraction }: { attraction: Attraction }) {
             <AttractionIconView
                 attraction={attraction}
                 className={cn(
-                    "mt-0.5 flex size-14 shrink-0 items-center justify-center rounded-xl [&_svg]:size-6",
+                    "mt-0.5 flex size-12 shrink-0 items-center justify-center rounded-xl [&_svg]:size-5",
                     getAttractionCircleColor(attraction),
                 )}
             />
@@ -78,13 +78,13 @@ function AttractionThumbnail({ attraction }: { attraction: Attraction }) {
     }
 
     return (
-        <span className="mt-0.5 size-14 shrink-0 overflow-hidden rounded-xl bg-muted">
+        <span className="mt-0.5 size-12 shrink-0 overflow-hidden rounded-xl bg-muted">
             <img
                 src={attraction.photo}
                 alt={attraction.name}
                 loading="lazy"
                 onError={() => setFailed(true)}
-                className="size-14 object-cover motion-safe:transition-opacity motion-safe:duration-300"
+                className="size-12 object-cover motion-safe:transition-opacity motion-safe:duration-300"
             />
         </span>
     )

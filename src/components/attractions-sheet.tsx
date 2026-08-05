@@ -24,7 +24,13 @@ export function AttractionsSheet({ control, description, header, children }: Att
         <Drawer open={control.open} onOpenChange={control.onOpenChange} showSwipeHandle>
             <DrawerContent className="h-[80dvh] max-h-[90dvh]">
                 <DrawerClose
-                    render={<Button variant="ghost" className="hit-area-[2px] absolute top-4 right-4" size="icon-lg" />}
+                    render={
+                        <Button
+                            variant="ghost"
+                            className="hit-area-x-1 hit-area-y-1 absolute top-4 right-4"
+                            size="icon-lg"
+                        />
+                    }
                 >
                     <XIcon />
                     <span className="sr-only">Close</span>

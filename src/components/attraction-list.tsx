@@ -21,14 +21,14 @@ export function AttractionList({ attractions, selection, onGroupFilter }: Attrac
 
     if (attractions.length === 0) {
         return (
-            <div className="min-h-0 flex-1 overflow-y-auto px-2 py-2">
+            <div className="min-h-0 flex-1 overflow-y-auto px-3 py-2">
                 <p className="py-8 text-center text-sm text-muted-foreground">No places match your search or filter.</p>
             </div>
         )
     }
 
     return (
-        <div className="min-h-0 flex-1 overflow-y-auto px-2 py-2">
+        <div className="min-h-0 flex-1 overflow-y-auto px-3 py-2">
             <ul className="flex flex-col gap-1">
                 {attractions.map((attraction) => (
                     <li

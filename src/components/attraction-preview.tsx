@@ -76,7 +76,7 @@ export function AttractionPreview({ attraction, onMeetHere, onClose }: Attractio
                     {hasDescription(attraction) && (
                         <p className="text-sm text-muted-foreground">{attraction.description}</p>
                     )}
-                    <Button className="w-full" onClick={() => onMeetHere(attraction)}>
+                    <Button className="hit-area-y-1.5 w-full" onClick={() => onMeetHere(attraction)}>
                         <MapPin className="size-4" aria-hidden />
                         Meet here
                     </Button>
