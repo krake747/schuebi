@@ -8,6 +8,7 @@ import { ATTRACTIONS } from "@/data/attractions-generated"
 import { beautifyLabel, facilityCategory } from "@/data/attractions"
 import { useFilters } from "@/store/use-filters"
 import { useFavourites } from "@/store/use-favourites"
+import { useSelection } from "@/store/use-selection"
 import { buildFilters, filterAttractions } from "@/utils/filters"
 
 import "@/index.css"
@@ -30,6 +31,7 @@ afterEach(() => {
     root = null
     useFilters.setState({ query: "", selected: [], open: false })
     useFavourites.setState({ ids: [] })
+    useSelection.setState({ selectedId: null, flyToId: null, sheetOpen: false })
 })
 
 test("shows header, empty state and a visible map canvas", async () => {

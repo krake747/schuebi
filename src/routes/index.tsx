@@ -23,10 +23,12 @@ import { SlideUpPresence } from "@/components/slide-up-presence"
 import { Button } from "@/components/ui/button"
 import { MapMarker, MarkerContent, MarkerTooltip, useMap } from "@/components/ui/map"
 import { ATTRACTIONS } from "@/data/attractions-generated"
+import { useFilteredAttractions } from "@/hooks/use-filtered-attractions"
 import { useMeetingPoint } from "@/hooks/use-meeting-point"
 import { cn } from "@/lib/utils"
 import { categoryStyle, facilityCategory } from "@/data/attractions"
 import { useFilters } from "@/store/use-filters"
+import { selectSelectedAttraction, useSelection } from "@/store/use-selection"
 import { useFavourites } from "@/store/use-favourites"
 
 function toCoordinate(value: unknown, max: number): number | undefined {
@@ -118,7 +120,15 @@ function MeetingPointPage() {
     const search = Route.useSearch()
     const [map, setMap] = useState<MapLibreMap | null>(null)
     const meeting = useMeetingPoint(search, map)
-    const { filter, selection, share, sheet, pin } = meeting
+    const { filter, share, pin } = meeting
+    const selected = useSelection(selectSelectedAttraction)
+    const selectedId = useSelection((state) => state.selectedId)
+    const flyToId = useSelection((state) => state.flyToId)
+    const sheetOpen = useSelection((state) => state.sheetOpen)
+    const selectAttraction = useSelection((state) => state.select)
+    const clearSelection = useSelection((state) => state.clear)
+    const setSheetOpen = useSelection((state) => state.setSheetOpen)
+    const filtered = useFilteredAttractions()
     const open = useFilters((state) => state.open)
     const setFiltersOpen = useFilters((state) => state.setOpen)
     const favouriteIds = new Set(useFavourites((state) => state.ids))
@@ -127,15 +137,15 @@ function MeetingPointPage() {
         <div className="relative h-dvh bg-muted">
             <main className="absolute inset-0 overflow-hidden">
                 <Map initialCenter={meeting.pin} onTap={meeting.handleTap} onReady={setMap}>
-                    {meeting.filtered.map((attraction) => (
+                    {filtered.map((attraction) => (
                         <MapMarker
                             key={attraction.id}
                             position={{ lng: attraction.lng, lat: attraction.lat }}
-                            onClick={() => selection.selectAttraction(attraction.id)}
+                            onClick={() => selectAttraction(attraction.id)}
                         >
                             <MarkerContent className="marker-content hit-area-2.5">
                                 <AttractionPin
-                                    active={attraction.id === selection.selectedId}
+                                    active={attraction.id === selectedId}
                                     attraction={attraction}
                                     favourited={favouriteIds.has(attraction.id)}
                                 />
@@ -143,7 +153,7 @@ function MeetingPointPage() {
                             <MarkerTooltip offset={18}>{attraction.name}</MarkerTooltip>
                         </MapMarker>
                     ))}
-                    <FlyToSelected id={selection.flyToId} />
+                    <FlyToSelected id={flyToId} />
                 </Map>
                 <div className="absolute top-20 left-3 z-10 flex items-center gap-2 [@media(min-height:600px)]:top-22">
                     <Button
@@ -151,7 +161,7 @@ function MeetingPointPage() {
                         variant="default"
                         size="lg"
                         className="rounded-full shadow-md"
-                        onClick={() => sheet.setOpen(true)}
+                        onClick={() => setSheetOpen(true)}
                     >
                         <Search className="size-4" aria-hidden />
                         Find places
@@ -197,12 +207,12 @@ function MeetingPointPage() {
                 </Button>
                 {map !== null && pin !== null && <MapPin map={map} lat={pin.lat} lng={pin.lng} />}
                 <AnimatePresence mode="wait">
-                    {selection.selected !== null && !sheet.open ? (
+                    {selected !== null && !sheetOpen ? (
                         <SlideUpPresence key="preview">
                             <AttractionPreview
-                                attraction={selection.selected}
+                                attraction={selected}
                                 onMeetHere={meeting.handleMeetHere}
-                                onClose={selection.clearSelection}
+                                onClose={clearSelection}
                             />
                         </SlideUpPresence>
                     ) : pin === null ? (
@@ -216,22 +226,19 @@ function MeetingPointPage() {
                     )}
                 </AnimatePresence>
                 <AttractionsSheet
-                    control={{ open: sheet.open, onOpenChange: sheet.setOpen }}
-                    description={`${meeting.filtered.length} ${meeting.filtered.length === 1 ? "place" : "places"} around the Glacis`}
+                    control={{ open: sheetOpen, onOpenChange: setSheetOpen }}
+                    description={`${filtered.length} ${filtered.length === 1 ? "place" : "places"} around the Glacis`}
                     header={<AttractionSearch />}
                 >
-                    <AttractionList
-                        attractions={meeting.filtered}
-                        selection={{ selectedId: selection.selectedId, onSelect: selection.selectAttraction }}
-                    />
-                    {selection.selected !== null && (
-                        <AttractionFooter attraction={selection.selected} onMeetHere={meeting.handleMeetHere} />
+                    <AttractionList attractions={filtered} />
+                    {selected !== null && (
+                        <AttractionFooter attraction={selected} onMeetHere={meeting.handleMeetHere} />
                     )}
                 </AttractionsSheet>
                 <FilterDrawer />
                 <p aria-live="polite" className="sr-only">
-                    {selection.selected !== null
-                        ? `${selection.selected.name} selected`
+                    {selected !== null
+                        ? `${selected.name} selected`
                         : pin === null
                           ? ""
                           : "Meeting point set"}

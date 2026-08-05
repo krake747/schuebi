@@ -2,15 +2,15 @@ import { useEffect, useRef } from "react"
 
 import { AttractionListItem } from "@/components/attraction-list-item"
 import type { Attraction } from "@/data/attractions"
+import { useSelection } from "@/store/use-selection"
 
 type AttractionListProps = {
     attractions: Attraction[]
-    selection: { selectedId: string | null; onSelect: (id: string) => void }
 }
 
-export function AttractionList({ attractions, selection }: AttractionListProps) {
+export function AttractionList({ attractions }: AttractionListProps) {
     const itemRefs = useRef(new Map<string, HTMLLIElement>())
-    const { selectedId, onSelect } = selection
+    const selectedId = useSelection((state) => state.selectedId)
 
     useEffect(() => {
         if (selectedId === null) return
@@ -37,11 +37,7 @@ export function AttractionList({ attractions, selection }: AttractionListProps) 
                             else itemRefs.current.delete(attraction.id)
                         }}
                     >
-                        <AttractionListItem
-                            attraction={attraction}
-                            active={attraction.id === selectedId}
-                            onSelect={onSelect}
-                        />
+                        <AttractionListItem attraction={attraction} />
                     </li>
                 ))}
             </ul>

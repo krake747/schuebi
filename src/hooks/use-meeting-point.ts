@@ -3,12 +3,10 @@ import type { Map as MapLibreMap } from "maplibre-gl"
 import { useState } from "react"
 
 import type { Attraction } from "@/data/attractions"
-import { ATTRACTIONS } from "@/data/attractions-generated"
 import { roundCoordinate } from "@/utils/maps"
 import { buildShareUrl } from "@/utils/share"
-import { filterAttractions } from "@/utils/filters"
 import { hasActiveFilters, useFilters } from "@/store/use-filters"
-import { useFavourites } from "@/store/use-favourites"
+import { useSelection } from "@/store/use-selection"
 import { useShare } from "./use-share"
 
 export function useMeetingPoint(search: { lat: number | undefined; lng: number | undefined }, map: MapLibreMap | null) {
@@ -16,28 +14,14 @@ export function useMeetingPoint(search: { lat: number | undefined; lng: number |
     const { share, copied } = useShare()
     const pin = search.lat !== undefined && search.lng !== undefined ? { lat: search.lat, lng: search.lng } : null
     const [mode, setMode] = useState<"create" | "shared">(() => (pin === null ? "create" : "shared"))
-    const [selectedId, setSelectedId] = useState<string | null>(null)
-    const [flyToId, setFlyToId] = useState<string | null>(null)
-    const [sheetOpen, setSheetOpen] = useState(false)
-
+    const setSheetOpen = useSelection((state) => state.setSheetOpen)
+    const clearSelection = useSelection((state) => state.clear)
+    const clearFilters = useFilters((state) => state.clear)
     const query = useFilters((state) => state.query)
     const selected = useFilters((state) => state.selected)
-    const clearFilters = useFilters((state) => state.clear)
-    const favouriteIds = useFavourites((state) => state.ids)
-
-    const selectedAttraction =
-        selectedId === null ? null : (ATTRACTIONS.find((attraction) => attraction.id === selectedId) ?? null)
-    const filtered = filterAttractions(query, selected, new Set(favouriteIds))
-
-    const selectAttraction = (id: string) => {
-        setSelectedId(id)
-        setFlyToId(id)
-    }
-
-    const clearSelection = () => setSelectedId(null)
 
     const setPin = (lat: number, lng: number) => {
-        setSelectedId(null)
+        clearSelection()
         setMode("create")
         void navigate({
             to: "/",
@@ -66,12 +50,9 @@ export function useMeetingPoint(search: { lat: number | undefined; lng: number |
 
     return {
         pin,
-        filtered,
         handleTap,
         handleMeetHere,
         share: { mode, copied, onShare: handleShare, onClear: handleClear },
-        selection: { selectedId, flyToId, selected: selectedAttraction, selectAttraction, clearSelection },
         filter: { clearFilters, hasActiveFilters: hasActiveFilters(query, selected) },
-        sheet: { open: sheetOpen, setOpen: setSheetOpen },
     }
 }

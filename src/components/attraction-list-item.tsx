@@ -6,20 +6,21 @@ import { AttractionIconView, getAttractionCircleColor } from "@/components/attra
 import { FavouriteButton } from "@/components/favourite-button"
 import { Badge } from "@/components/ui/badge"
 import { useFilters } from "@/store/use-filters"
+import { useSelection } from "@/store/use-selection"
 
 type AttractionListItemProps = {
     attraction: Attraction
-    active: boolean
-    onSelect: (id: string) => void
 }
 
-export function AttractionListItem({ attraction, active, onSelect }: AttractionListItemProps) {
+export function AttractionListItem({ attraction }: AttractionListItemProps) {
     const toggle = useFilters((state) => state.toggle)
+    const active = useSelection((state) => state.selectedId === attraction.id)
+    const select = useSelection((state) => state.select)
     return (
         <div className={cn("flex w-full items-start gap-3 rounded-xl p-2 transition-colors", active && "bg-accent")}>
             <button
                 type="button"
-                onClick={() => onSelect(attraction.id)}
+                onClick={() => select(attraction.id)}
                 aria-current={active}
                 className="flex min-w-0 flex-1 items-start gap-3 rounded-lg text-left outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring/70"
             >

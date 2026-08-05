@@ -3,7 +3,7 @@ import { useState } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
 import { cn } from "@/lib/utils"
-import { useFavourites } from "@/store/use-favourites"
+import { useFavourites, useIsFavourite } from "@/store/use-favourites"
 
 const BURST_PARTICLES = 7
 const PARTICLE_COLORS = [
@@ -22,7 +22,7 @@ type FavouriteButtonProps = {
 }
 
 export function FavouriteButton({ id, className }: FavouriteButtonProps) {
-    const favourite = useFavourites((state) => state.ids.includes(id))
+    const favourite = useIsFavourite(id)
     const toggleFavourite = useFavourites((state) => state.toggle)
     const reduceMotion = useReducedMotion()
     const [burstKey, setBurstKey] = useState(0)

@@ -23,3 +23,7 @@ export const useFavourites = create<FavouritesState>()(
         },
     ),
 )
+
+export function useIsFavourite(id: string): boolean {
+    return useFavourites((state) => state.ids.includes(id))
+}

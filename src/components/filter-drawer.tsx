@@ -12,12 +12,12 @@ import {
 } from "@/components/ui/drawer"
 import { categoryStyle } from "@/data/attractions"
 import { cn } from "@/lib/utils"
-import { buildFilters, filterAttractions, FAVOURITES_KEY } from "@/utils/filters"
+import { buildFilters, FAVOURITES_KEY } from "@/utils/filters"
 import { useFilters } from "@/store/use-filters"
 import { useFavourites } from "@/store/use-favourites"
+import { useFilteredAttractions } from "@/hooks/use-filtered-attractions"
 
 export function FilterDrawer() {
-    const query = useFilters((state) => state.query)
     const selected = useFilters((state) => state.selected)
     const toggle = useFilters((state) => state.toggle)
     const clear = useFilters((state) => state.clear)
@@ -25,7 +25,7 @@ export function FilterDrawer() {
     const setOpen = useFilters((state) => state.setOpen)
     const favouriteIds = useFavourites((state) => state.ids)
     const allFilters = buildFilters()
-    const count = filterAttractions(query, selected, new Set(favouriteIds)).length
+    const count = useFilteredAttractions().length
 
     return (
         <Drawer open={open} onOpenChange={setOpen} swipeDirection="right">
