@@ -27,8 +27,17 @@ export function buildFilters(): FilterOption[] {
         .toSorted((a, b) => b.count - a.count)
 }
 
-export function filterAttractions(query: string, activeFilters: readonly string[]): Attraction[] {
+export const FAVOURITES_KEY = "__favourites__"
+
+export function filterAttractions(
+    query: string,
+    activeFilters: readonly string[],
+    favouriteIds: ReadonlySet<string> = new Set(),
+): Attraction[] {
     const q = query.trim().toLowerCase()
+    const favouritesActive = activeFilters.includes(FAVOURITES_KEY)
+    const categories = activeFilters.filter((key) => key !== FAVOURITES_KEY)
+    const nothingActive = !favouritesActive && categories.length === 0
     return ATTRACTIONS.filter((attraction) => {
         const matchesQuery =
             q === "" ||
@@ -37,7 +46,9 @@ export function filterAttractions(query: string, activeFilters: readonly string[
             attraction.category.toLowerCase().includes(q) ||
             (attraction.group !== undefined && attraction.group.toLowerCase().includes(q))
         if (!matchesQuery) return false
-        if (activeFilters.length === 0) return true
-        return activeFilters.includes(filterKey(attraction))
+        if (nothingActive) return true
+        const matchesFavourites = favouritesActive && favouriteIds.has(attraction.id)
+        const matchesCategories = categories.length > 0 && categories.includes(filterKey(attraction))
+        return matchesFavourites || matchesCategories
     })
 }

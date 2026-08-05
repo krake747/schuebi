@@ -1,6 +1,6 @@
 import { useNavigate } from "@tanstack/react-router"
 import type { Map as MapLibreMap } from "maplibre-gl"
-import { useMemo, useState } from "react"
+import { useState } from "react"
 
 import type { Attraction } from "@/data/attractions"
 import { ATTRACTIONS } from "@/data/attractions-generated"
@@ -8,6 +8,7 @@ import { roundCoordinate } from "@/utils/maps"
 import { buildShareUrl } from "@/utils/share"
 import { filterAttractions } from "@/utils/filters"
 import { hasActiveFilters, useFilters } from "@/store/use-filters"
+import { useFavourites } from "@/store/use-favourites"
 import { useShare } from "./use-share"
 
 export function useMeetingPoint(search: { lat: number | undefined; lng: number | undefined }, map: MapLibreMap | null) {
@@ -22,10 +23,11 @@ export function useMeetingPoint(search: { lat: number | undefined; lng: number |
     const query = useFilters((state) => state.query)
     const selected = useFilters((state) => state.selected)
     const clearFilters = useFilters((state) => state.clear)
+    const favouriteIds = useFavourites((state) => state.ids)
 
     const selectedAttraction =
         selectedId === null ? null : (ATTRACTIONS.find((attraction) => attraction.id === selectedId) ?? null)
-    const filtered = useMemo(() => filterAttractions(query, selected), [query, selected])
+    const filtered = filterAttractions(query, selected, new Set(favouriteIds))
 
     const selectAttraction = (id: string) => {
         setSelectedId(id)

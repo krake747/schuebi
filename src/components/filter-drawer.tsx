@@ -1,5 +1,4 @@
-import { Check, XIcon } from "lucide-react"
-import { useMemo } from "react"
+import { Check, Heart, XIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -13,8 +12,9 @@ import {
 } from "@/components/ui/drawer"
 import { categoryStyle } from "@/data/attractions"
 import { cn } from "@/lib/utils"
-import { buildFilters, filterAttractions } from "@/utils/filters"
+import { buildFilters, filterAttractions, FAVOURITES_KEY } from "@/utils/filters"
 import { useFilters } from "@/store/use-filters"
+import { useFavourites } from "@/store/use-favourites"
 
 export function FilterDrawer() {
     const query = useFilters((state) => state.query)
@@ -23,8 +23,9 @@ export function FilterDrawer() {
     const clear = useFilters((state) => state.clear)
     const open = useFilters((state) => state.open)
     const setOpen = useFilters((state) => state.setOpen)
-    const allFilters = useMemo(() => buildFilters(), [])
-    const count = filterAttractions(query, selected).length
+    const favouriteIds = useFavourites((state) => state.ids)
+    const allFilters = buildFilters()
+    const count = filterAttractions(query, selected, new Set(favouriteIds)).length
 
     return (
         <Drawer open={open} onOpenChange={setOpen} swipeDirection="right">
@@ -46,6 +47,33 @@ export function FilterDrawer() {
                     <DrawerDescription>Select as many types as you like.</DrawerDescription>
                 </DrawerHeader>
                 <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-4 py-3">
+                    {favouriteIds.length > 0 && (
+                        <button
+                            type="button"
+                            aria-pressed={selected.includes(FAVOURITES_KEY)}
+                            onClick={() => toggle(FAVOURITES_KEY)}
+                            className={cn(
+                                "mb-3 inline-flex w-fit items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium transition-colors duration-150 outline-none select-none focus-visible:ring-2 focus-visible:ring-ring/70 active:scale-[0.97]",
+                                selected.includes(FAVOURITES_KEY)
+                                    ? "bg-primary text-primary-foreground"
+                                    : "bg-secondary text-secondary-foreground hover:bg-accent",
+                            )}
+                        >
+                            <Heart
+                                className={cn("size-3", selected.includes(FAVOURITES_KEY) && "fill-current")}
+                                aria-hidden
+                            />
+                            Favourites
+                            <span className="text-2xs ml-1 opacity-60">{favouriteIds.length}</span>
+                            <Check
+                                className={cn(
+                                    "size-3",
+                                    selected.includes(FAVOURITES_KEY) ? "opacity-100" : "opacity-0",
+                                )}
+                                aria-hidden
+                            />
+                        </button>
+                    )}
                     <fieldset className="flex flex-wrap gap-2">
                         <legend className="sr-only">Filter by type</legend>
                         {allFilters.map((f) => {

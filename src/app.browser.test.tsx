@@ -4,6 +4,11 @@ import { createRoot, type Root } from "react-dom/client"
 import { afterEach, expect, test } from "vitest"
 
 import { routeTree } from "@/routeTree.gen"
+import { ATTRACTIONS } from "@/data/attractions-generated"
+import { beautifyLabel, facilityCategory } from "@/data/attractions"
+import { useFilters } from "@/store/use-filters"
+import { useFavourites } from "@/store/use-favourites"
+import { buildFilters, filterAttractions } from "@/utils/filters"
 
 import "@/index.css"
 
@@ -23,6 +28,8 @@ function mountApp(url: string) {
 afterEach(() => {
     root?.unmount()
     root = null
+    useFilters.setState({ query: "", selected: [], open: false })
+    useFavourites.setState({ ids: [] })
 })
 
 test("shows header, empty state and a visible map canvas", async () => {
@@ -117,4 +124,41 @@ test("clear filters button resets the map to all attractions", async () => {
                 [...document.querySelectorAll("button")].filter((b) => b.textContent?.includes("Clear filters")).length,
         )
         .toBe(0)
+})
+
+test("favourites stays selected and retained when a category filter is added", async () => {
+    const favourited = ATTRACTIONS[0]!
+    useFavourites.getState().toggle(favourited.id)
+    mountApp("/")
+
+    await page.getByRole("button", { name: /Filters/ }).click()
+    await expect.poll(() => useFilters.getState().open).toBe(true)
+
+    await page.getByRole("button", { name: /Favourites/ }).click()
+    await expect.poll(() => useFilters.getState().selected).toContain("__favourites__")
+
+    const favouriteKey = facilityCategory(favourited.group ?? favourited.category)
+    const other = buildFilters().find((f) => f.key !== favouriteKey)!
+    const otherLabel = beautifyLabel(other.key)
+    await page.getByRole("button", { name: new RegExp(otherLabel) }).click()
+
+    const selected = useFilters.getState().selected
+    expect(selected).toContain("__favourites__")
+    expect(selected).toContain(other.key)
+
+    await expect
+        .poll(() =>
+            page
+                .getByRole("button", { name: /Favourites/ })
+                .element()
+                .getAttribute("aria-pressed"),
+        )
+        .toBe("true")
+
+    const results = filterAttractions("", selected, new Set([favourited.id]))
+    expect(results.some((a) => a.id === favourited.id)).toBe(true)
+
+    await expect
+        .poll(() => page.getByRole("button", { name: /Show \d+ places?/ }).element().textContent)
+        .toContain(String(results.length))
 })
