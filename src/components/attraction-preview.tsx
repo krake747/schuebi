@@ -1,14 +1,14 @@
-import { Clock, Heart, MapPin, X } from "lucide-react"
+import { Clock, MapPin, X } from "lucide-react"
 import { useState } from "react"
 
 import { beautifyLabel, hasDescription, hasPhoto, type Attraction } from "@/data/attractions"
 import { cn } from "@/lib/utils"
 import { AttractionIconView, getAttractionCircleColor } from "@/components/attraction-icon"
 import { BottomCard } from "@/components/bottom-card"
+import { FavouriteButton } from "@/components/favourite-button"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { useFavourites } from "@/store/use-favourites"
 
 type AttractionPreviewProps = {
     attraction: Attraction
@@ -19,8 +19,6 @@ type AttractionPreviewProps = {
 export function AttractionPreview({ attraction, onMeetHere, onClose }: AttractionPreviewProps) {
     const [imageFailed, setImageFailed] = useState(false)
     const showPhoto = hasPhoto(attraction) && !imageFailed
-    const favourite = useFavourites((state) => state.ids.includes(attraction.id))
-    const toggleFavourite = useFavourites((state) => state.toggle)
 
     return (
         <BottomCard>
@@ -64,16 +62,10 @@ export function AttractionPreview({ attraction, onMeetHere, onClose }: Attractio
                         </div>
                     </div>
                     <CardAction className="flex items-center gap-1">
-                        <Button
-                            variant="ghost"
-                            size="icon-lg"
-                            className="hit-area-[2px]"
-                            onClick={() => toggleFavourite(attraction.id)}
-                            aria-label={favourite ? "Remove from favourites" : "Add to favourites"}
-                            aria-pressed={favourite}
-                        >
-                            <Heart className={cn("size-4", favourite && "fill-destructive text-destructive")} />
-                        </Button>
+                        <FavouriteButton
+                            id={attraction.id}
+                            className="hit-area-[2px] flex size-9 items-center justify-center rounded-2xl text-muted-foreground hover:bg-muted hover:text-foreground"
+                        />
                         <Button
                             variant="ghost"
                             size="icon-lg"
