@@ -1,6 +1,7 @@
 import type { Attraction } from "@/data/attractions"
 import { beautifyLabel, facilityCategory } from "@/data/attractions"
 import { ATTRACTIONS } from "@/data/attractions-generated"
+import * as R from "remeda"
 
 export type FilterOption = {
     key: string
@@ -13,18 +14,13 @@ function filterKey(attraction: Attraction): string {
 }
 
 export function buildFilters(): FilterOption[] {
-    const counts = new Map<string, number>()
-    for (const attraction of ATTRACTIONS) {
-        const key = filterKey(attraction)
-        counts.set(key, (counts.get(key) ?? 0) + 1)
-    }
-    return Array.from(counts.entries())
-        .map(([key, count]) => ({
-            key,
-            label: beautifyLabel(key),
-            count,
-        }))
-        .toSorted((a, b) => b.count - a.count)
+    return R.pipe(
+        ATTRACTIONS,
+        R.countBy(filterKey),
+        R.entries(),
+        R.map(([key, count]) => ({ key, label: beautifyLabel(key), count: count ?? 0 })),
+        R.sortBy([R.prop("count"), "desc"]),
+    )
 }
 
 export const FAVOURITES_KEY = "__favourites__"
