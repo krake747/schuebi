@@ -49,7 +49,10 @@ export function FavouriteButton({ id, className }: FavouriteButtonProps) {
                 transition={{ duration: 0.3, ease: "easeOut" }}
                 className="inline-flex"
             >
-                <Heart className={cn("size-5", favourite && "fill-destructive text-destructive")} aria-hidden />
+                <Heart
+                    className={cn("size-5", favourite ? "fill-rose-500 text-rose-500" : "text-rose-500")}
+                    aria-hidden
+                />
             </motion.span>
             {burstKey > 0 && !reduceMotion && <Burst key={burstKey} />}
         </button>
