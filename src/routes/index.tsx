@@ -119,7 +119,7 @@ function MeetingPointPage() {
     const search = Route.useSearch()
     const [map, setMap] = useState<MapLibreMap | null>(null)
     const meeting = useMeetingPoint(search, map)
-    const { filter, share, pin } = meeting
+    const { filter, pin } = meeting
     const selected = useSelection(selectSelectedAttraction)
     const selectedId = useSelection((state) => state.selectedId)
     const flyToId = useSelection((state) => state.flyToId)
@@ -140,7 +140,10 @@ function MeetingPointPage() {
                         <MapMarker
                             key={attraction.id}
                             position={{ lng: attraction.lng, lat: attraction.lat }}
-                            onClick={() => selectAttraction(attraction.id)}
+                            onClick={() => {
+                                selectAttraction(attraction.id)
+                                meeting.handleMeetHere(attraction)
+                            }}
                         >
                             <MarkerContent className="marker-content hit-area-2.5">
                                 <AttractionPin
@@ -212,8 +215,6 @@ function MeetingPointPage() {
                             <AttractionPreview
                                 attraction={selected}
                                 pin={pin}
-                                share={share}
-                                onMeetHere={meeting.handleMeetHere}
                                 onClose={clearSelection}
                             />
                         </SlideUpPresence>

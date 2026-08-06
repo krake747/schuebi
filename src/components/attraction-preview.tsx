@@ -1,6 +1,6 @@
-import { Clock, MapPin, Navigation, Share2, Trash2, X } from "lucide-react"
+import { Clock, Navigation, Share2, X } from "lucide-react"
 import { useState } from "react"
-import { AnimatePresence, motion } from "motion/react"
+import { motion } from "motion/react"
 
 import { beautifyLabel, hasDescription, hasPhoto, type Attraction } from "@/data/attractions"
 import { cn } from "@/lib/utils"
@@ -14,33 +14,27 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
-export type ShareController = {
-    mode: "create" | "shared"
-    copied: boolean
-    onShare: () => void
-    onClear: () => void
-}
-
 type AttractionPreviewProps = {
     attraction: Attraction | null
     pin: { lat: number; lng: number } | null
-    share: ShareController
-    onMeetHere: (attraction: Attraction) => void
     onClose: () => void
 }
 
 const BODY_TRANSITION = { duration: 0.28, ease: [0.32, 0.72, 0, 1] as const }
 
-export function AttractionPreview({ attraction, pin, share, onMeetHere, onClose }: AttractionPreviewProps) {
+export function AttractionPreview({ attraction, pin, onClose }: AttractionPreviewProps) {
     const [imageFailed, setImageFailed] = useState(false)
-    const { share: shareAttraction, copied } = useShare()
+    const { share, copied } = useShare()
     const showPhoto = attraction !== null && hasPhoto(attraction) && !imageFailed
 
-    const showMeetingBody = pin !== null
+    const target = pin ?? (attraction !== null ? { lat: attraction.lat, lng: attraction.lng } : null)
 
     return (
-        <BottomCard>
-            <Card size="sm" className="mx-auto w-full max-w-md rounded-3xl bg-card/95 shadow-2xl backdrop-blur">
+        <BottomCard className="pointer-events-none">
+            <Card
+                size="sm"
+                className="pointer-events-auto mx-auto w-full max-w-md rounded-3xl bg-card/95 shadow-2xl backdrop-blur"
+            >
                 {showPhoto && attraction !== null && (
                     <div className="-mt-4 aspect-16/10 bg-muted">
                         <img
@@ -101,158 +95,51 @@ export function AttractionPreview({ attraction, pin, share, onMeetHere, onClose 
                     </CardHeader>
                 )}
                 <CardContent className="flex flex-col gap-4 pb-1">
-                    <AnimatePresence mode="wait" initial={false}>
-                        {showMeetingBody && pin !== null ? (
-                            <MeetingBody key="meeting" pin={pin} share={share} />
-                        ) : attraction !== null ? (
-                            <AttractionBody
-                                key="attraction"
-                                attraction={attraction}
-                                copied={copied}
-                                onShareAttraction={() => shareAttraction(buildShareUrl(attraction.lat, attraction.lng))}
-                                onMeetHere={() => onMeetHere(attraction)}
-                            />
-                        ) : null}
-                    </AnimatePresence>
+                    {attraction !== null && hasDescription(attraction) && (
+                        <motion.p
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={BODY_TRANSITION}
+                            className="text-sm text-muted-foreground"
+                        >
+                            {attraction.description}
+                        </motion.p>
+                    )}
+                    {target !== null && (
+                        <motion.div
+                            className="grid grid-cols-2 gap-2"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={BODY_TRANSITION}
+                        >
+                            <Button
+                                size="lg"
+                                variant="secondary"
+                                className="hit-area-y-1 w-full"
+                                nativeButton={false}
+                                render={
+                                    <a
+                                        href={googleMapsDirectionsUrl(target.lat, target.lng)}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    />
+                                }
+                            >
+                                <Navigation className="size-4" aria-hidden />
+                                Direct me
+                            </Button>
+                            <Button
+                                size="lg"
+                                className="hit-area-y-1 w-full"
+                                onClick={() => share(buildShareUrl(target.lat, target.lng))}
+                            >
+                                <Share2 className="size-4" aria-hidden />
+                                {copied ? "Link copied" : "Share"}
+                            </Button>
+                        </motion.div>
+                    )}
                 </CardContent>
             </Card>
         </BottomCard>
-    )
-}
-
-function AttractionBody({
-    attraction,
-    copied,
-    onShareAttraction,
-    onMeetHere,
-}: {
-    attraction: Attraction
-    copied: boolean
-    onShareAttraction: () => void
-    onMeetHere: () => void
-}) {
-    return (
-        <motion.div
-            className="flex flex-col gap-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, transition: { duration: 0.15 } }}
-            transition={BODY_TRANSITION}
-        >
-            {hasDescription(attraction) && <p className="text-sm text-muted-foreground">{attraction.description}</p>}
-            <Button size="lg" className="hit-area-y-1 w-full" onClick={onMeetHere}>
-                <MapPin className="size-4" aria-hidden />
-                Meet here
-            </Button>
-            <div className="grid grid-cols-2 gap-2">
-                <Button
-                    size="lg"
-                    variant="secondary"
-                    className="hit-area-y-1 w-full"
-                    nativeButton={false}
-                    render={
-                        <a
-                            href={googleMapsDirectionsUrl(attraction.lat, attraction.lng)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        />
-                    }
-                >
-                    <Navigation className="size-4" aria-hidden />
-                    Direct me
-                </Button>
-                <Button size="lg" variant="secondary" className="hit-area-y-1 w-full" onClick={onShareAttraction}>
-                    <Share2 className="size-4" aria-hidden />
-                    {copied ? "Link copied" : "Share"}
-                </Button>
-            </div>
-        </motion.div>
-    )
-}
-
-function MeetingBody({ pin, share }: { pin: { lat: number; lng: number }; share: ShareController }) {
-    return (
-        <motion.div
-            className="flex flex-col gap-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, transition: { duration: 0.15 } }}
-            transition={BODY_TRANSITION}
-        >
-            {share.mode === "shared" ? (
-                <>
-                    <Button
-                        size="lg"
-                        className="hit-area-y-1 w-full bg-emerald-500 text-white hover:bg-emerald-600"
-                        nativeButton={false}
-                        render={
-                            <a
-                                href={googleMapsDirectionsUrl(pin.lat, pin.lng)}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            />
-                        }
-                    >
-                        <Navigation className="size-4" aria-hidden />
-                        Navigate
-                    </Button>
-                    <div className="grid grid-cols-2 gap-2">
-                        <Button size="lg" variant="secondary" className="hit-area-y-1 w-full" onClick={share.onShare}>
-                            <Share2 className="size-4" aria-hidden />
-                            <AnimatedShareLabel copied={share.copied} shareLabel="Share Again" />
-                        </Button>
-                        <ClearPin onClear={share.onClear} />
-                    </div>
-                </>
-            ) : (
-                <>
-                    <Button size="lg" className="hit-area-y-1 w-full" onClick={share.onShare}>
-                        <Share2 className="size-4" aria-hidden />
-                        <AnimatedShareLabel copied={share.copied} shareLabel="Share Meeting Point" />
-                    </Button>
-                    <div className="grid grid-cols-2 gap-2">
-                        <Button
-                            size="lg"
-                            variant="secondary"
-                            className="hit-area-y-1 w-full"
-                            nativeButton={false}
-                            render={
-                                <a
-                                    href={googleMapsDirectionsUrl(pin.lat, pin.lng)}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                />
-                            }
-                        >
-                            <Navigation className="size-4" aria-hidden />
-                            Direct me
-                        </Button>
-                        <ClearPin onClear={share.onClear} />
-                    </div>
-                </>
-            )}
-        </motion.div>
-    )
-}
-
-function AnimatedShareLabel({ copied, shareLabel }: { copied: boolean; shareLabel: string }) {
-    return (
-        <motion.span
-            key={copied ? "copied" : "share"}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.2, ease: [0.19, 1, 0.22, 1] }}
-        >
-            {copied ? "Link copied" : shareLabel}
-        </motion.span>
-    )
-}
-
-function ClearPin({ onClear }: { onClear: () => void }) {
-    return (
-        <Button size="lg" variant="secondary" className="hit-area-y-1 w-full" onClick={onClear}>
-            <Trash2 className="size-5" aria-hidden />
-            Clear Pin
-        </Button>
     )
 }

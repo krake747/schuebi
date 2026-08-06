@@ -45,8 +45,8 @@ test("shows header, empty state and a visible map canvas", async () => {
 test("restores a pin from shared URL params", async () => {
     mountApp("/?lat=49.6168&lng=6.1237")
 
-    await expect.element(page.getByText("Navigate")).toBeVisible()
-    await expect.element(page.getByText("Share Again")).toBeVisible()
+    await expect.element(page.getByRole("button", { name: /Direct me/ })).toBeVisible()
+    await expect.element(page.getByRole("button", { name: /Share/ })).toBeVisible()
     await expect.poll(() => document.querySelector('[data-testid="pin"]')).not.toBeNull()
 })
 
@@ -64,7 +64,8 @@ test("finds a place in the sheet and sets it as the meeting point", async () => 
     await page.getByRole("listitem").first().click()
     await page.getByRole("button", { name: /Meet here at/ }).click()
 
-    await expect.element(page.getByRole("button", { name: "Clear Pin" })).toBeVisible()
+    await expect.element(page.getByRole("button", { name: /Direct me/ })).toBeVisible()
+    await expect.element(page.getByRole("button", { name: /Share/ })).toBeVisible()
     await expect.poll(() => document.querySelector('[data-testid="pin"]')).not.toBeNull()
 })
 
@@ -75,7 +76,8 @@ test("tapping a pin on the map opens the preview card", async () => {
     const firstMarker = document.querySelector(".maplibregl-marker") as HTMLElement
     firstMarker.click()
 
-    await expect.element(page.getByRole("button", { name: "Meet here" })).toBeVisible()
+    await expect.element(page.getByRole("button", { name: /Direct me/ })).toBeVisible()
+    await expect.poll(() => document.querySelector('[data-testid="pin"]')).not.toBeNull()
 })
 
 test("tapping the map canvas sets a meeting point", async () => {
@@ -85,7 +87,8 @@ test("tapping the map canvas sets a meeting point", async () => {
     const canvas = document.querySelector(".maplibregl-canvas") as HTMLElement
     canvas.click()
 
-    await expect.element(page.getByText("Share Meeting Point")).toBeVisible()
+    await expect.element(page.getByRole("button", { name: /Direct me/ })).toBeVisible()
+    await expect.element(page.getByRole("button", { name: /Share/ })).toBeVisible()
     await expect.poll(() => document.querySelector('[data-testid="pin"]')).not.toBeNull()
 })
 
@@ -97,11 +100,8 @@ test("shows a preview card for a selected attraction and meets there", async () 
     await page.getByRole("listitem").first().click()
     await page.getByRole("button", { name: /Close/ }).click()
 
-    await expect.element(page.getByRole("button", { name: "Meet here" })).toBeVisible()
-    await page.getByRole("button", { name: "Meet here" }).click()
-
-    await expect.element(page.getByRole("button", { name: "Clear Pin" })).toBeVisible()
-    await expect.poll(() => document.querySelector('[data-testid="pin"]')).not.toBeNull()
+    await expect.element(page.getByRole("button", { name: /Direct me/ })).toBeVisible()
+    await expect.element(page.getByRole("button", { name: /Share/ })).toBeVisible()
 })
 
 test("clear filters button resets the map to all attractions", async () => {
