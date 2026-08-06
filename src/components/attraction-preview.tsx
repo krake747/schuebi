@@ -37,7 +37,7 @@ export function AttractionPreview({ attraction, pin, onClose, onClearPin }: Attr
                 className="pointer-events-auto mx-auto w-full max-w-md rounded-3xl bg-card/95 shadow-2xl backdrop-blur"
             >
                 {showPhoto && attraction !== null && (
-                    <div className="-mt-4 aspect-16/10 bg-muted">
+                    <div className="-mt-4 aspect-4/3 max-h-70 bg-muted">
                         <img
                             src={attraction.photo}
                             alt={attraction.name}
