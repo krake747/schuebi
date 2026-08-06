@@ -18,7 +18,6 @@ import { FilterDrawer } from "@/components/filter-drawer"
 import { Header } from "@/components/header"
 import { Map } from "@/components/map"
 import { MapPin } from "@/components/map-pin"
-import { ShareSheet } from "@/components/share-sheet"
 import { SlideUpPresence } from "@/components/slide-up-presence"
 import { Button } from "@/components/ui/button"
 import { MapMarker, MarkerContent, MarkerTooltip, useMap } from "@/components/ui/map"
@@ -207,23 +206,21 @@ function MeetingPointPage() {
                 </Button>
                 {map !== null && pin !== null && <MapPin map={map} lat={pin.lat} lng={pin.lng} />}
                 <AnimatePresence mode="wait">
-                    {selected !== null && !sheetOpen ? (
-                        <SlideUpPresence key="preview">
+                    {!sheetOpen && (selected !== null || pin !== null) ? (
+                        <SlideUpPresence key="card">
                             <AttractionPreview
                                 attraction={selected}
+                                pin={pin}
+                                share={share}
                                 onMeetHere={meeting.handleMeetHere}
                                 onClose={clearSelection}
                             />
                         </SlideUpPresence>
-                    ) : pin === null ? (
+                    ) : !sheetOpen ? (
                         <SlideUpPresence key="empty">
                             <EmptyState />
                         </SlideUpPresence>
-                    ) : (
-                        <SlideUpPresence key="share">
-                            <ShareSheet share={share} pin={pin} />
-                        </SlideUpPresence>
-                    )}
+                    ) : null}
                 </AnimatePresence>
                 <AttractionsSheet
                     control={{ open: sheetOpen, onOpenChange: setSheetOpen }}
@@ -237,11 +234,7 @@ function MeetingPointPage() {
                 </AttractionsSheet>
                 <FilterDrawer />
                 <p aria-live="polite" className="sr-only">
-                    {selected !== null
-                        ? `${selected.name} selected`
-                        : pin === null
-                          ? ""
-                          : "Meeting point set"}
+                    {selected !== null ? `${selected.name} selected` : pin === null ? "" : "Meeting point set"}
                 </p>
             </main>
             <Header />

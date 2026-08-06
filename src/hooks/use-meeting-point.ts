@@ -21,7 +21,6 @@ export function useMeetingPoint(search: { lat: number | undefined; lng: number |
     const selected = useFilters((state) => state.selected)
 
     const setPin = (lat: number, lng: number) => {
-        clearSelection()
         setMode("create")
         void navigate({
             to: "/",
@@ -31,7 +30,10 @@ export function useMeetingPoint(search: { lat: number | undefined; lng: number |
         map?.flyTo({ center: [lng, lat], zoom: Math.max(map.getZoom(), 16), duration: 500, essential: true })
     }
 
-    const handleTap = (lat: number, lng: number) => setPin(lat, lng)
+    const handleTap = (lat: number, lng: number) => {
+        clearSelection()
+        setPin(lat, lng)
+    }
 
     const handleClear = () => {
         setMode("create")

@@ -64,7 +64,7 @@ test("finds a place in the sheet and sets it as the meeting point", async () => 
     await page.getByRole("listitem").first().click()
     await page.getByRole("button", { name: /Meet here at/ }).click()
 
-    await expect.element(page.getByText("Share Meeting Point")).toBeVisible()
+    await expect.element(page.getByRole("button", { name: "Clear pin" })).toBeVisible()
     await expect.poll(() => document.querySelector('[data-testid="pin"]')).not.toBeNull()
 })
 
@@ -100,7 +100,7 @@ test("shows a preview card for a selected attraction and meets there", async () 
     await expect.element(page.getByRole("button", { name: "Meet here" })).toBeVisible()
     await page.getByRole("button", { name: "Meet here" }).click()
 
-    await expect.element(page.getByText("Share Meeting Point")).toBeVisible()
+    await expect.element(page.getByRole("button", { name: "Clear pin" })).toBeVisible()
     await expect.poll(() => document.querySelector('[data-testid="pin"]')).not.toBeNull()
 })
 
