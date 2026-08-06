@@ -1,6 +1,6 @@
 import { Clock, MapPin, Navigation, Share2, Trash2, X } from "lucide-react"
 import { useState } from "react"
-import { motion } from "motion/react"
+import { AnimatePresence, motion } from "motion/react"
 
 import { beautifyLabel, hasDescription, hasPhoto, type Attraction } from "@/data/attractions"
 import { cn } from "@/lib/utils"
@@ -36,8 +36,7 @@ export function AttractionPreview({ attraction, pin, share, onMeetHere, onClose 
     const { share: shareAttraction, copied } = useShare()
     const showPhoto = attraction !== null && hasPhoto(attraction) && !imageFailed
 
-    const pinSet = pin !== null
-    const showAttractionBody = attraction !== null
+    const showMeetingBody = pin !== null
 
     return (
         <BottomCard>
@@ -102,18 +101,19 @@ export function AttractionPreview({ attraction, pin, share, onMeetHere, onClose 
                     </CardHeader>
                 )}
                 <CardContent className="flex flex-col gap-4 pb-1">
-                    {showAttractionBody && attraction !== null ? (
-                        <AttractionBody
-                            attraction={attraction}
-                            copied={copied}
-                            pinSet={pinSet}
-                            onShareAttraction={() => shareAttraction(buildShareUrl(attraction.lat, attraction.lng))}
-                            onMeetHere={() => onMeetHere(attraction)}
-                            onClearPin={share.onClear}
-                        />
-                    ) : pin !== null ? (
-                        <MeetingBody pin={pin} share={share} />
-                    ) : null}
+                    <AnimatePresence mode="wait" initial={false}>
+                        {showMeetingBody && pin !== null ? (
+                            <MeetingBody key="meeting" pin={pin} share={share} />
+                        ) : attraction !== null ? (
+                            <AttractionBody
+                                key="attraction"
+                                attraction={attraction}
+                                copied={copied}
+                                onShareAttraction={() => shareAttraction(buildShareUrl(attraction.lat, attraction.lng))}
+                                onMeetHere={() => onMeetHere(attraction)}
+                            />
+                        ) : null}
+                    </AnimatePresence>
                 </CardContent>
             </Card>
         </BottomCard>
@@ -123,29 +123,26 @@ export function AttractionPreview({ attraction, pin, share, onMeetHere, onClose 
 function AttractionBody({
     attraction,
     copied,
-    pinSet,
     onShareAttraction,
     onMeetHere,
-    onClearPin,
 }: {
     attraction: Attraction
     copied: boolean
-    pinSet: boolean
     onShareAttraction: () => void
     onMeetHere: () => void
-    onClearPin: () => void
 }) {
     return (
         <motion.div
             className="flex flex-col gap-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0.15 } }}
             transition={BODY_TRANSITION}
         >
             {hasDescription(attraction) && <p className="text-sm text-muted-foreground">{attraction.description}</p>}
             <Button size="lg" className="hit-area-y-1 w-full" onClick={onMeetHere}>
                 <MapPin className="size-4" aria-hidden />
-                {pinSet ? "Pin set" : "Meet here"}
+                Meet here
             </Button>
             <div className="grid grid-cols-2 gap-2">
                 <Button
@@ -164,14 +161,9 @@ function AttractionBody({
                     <Navigation className="size-4" aria-hidden />
                     Direct me
                 </Button>
-                <Button
-                    size="lg"
-                    variant="secondary"
-                    className="hit-area-y-1 w-full"
-                    onClick={pinSet ? onClearPin : onShareAttraction}
-                >
-                    {pinSet ? <Trash2 className="size-4" aria-hidden /> : <Share2 className="size-4" aria-hidden />}
-                    {pinSet ? "Clear pin" : copied ? "Link copied" : "Share"}
+                <Button size="lg" variant="secondary" className="hit-area-y-1 w-full" onClick={onShareAttraction}>
+                    <Share2 className="size-4" aria-hidden />
+                    {copied ? "Link copied" : "Share"}
                 </Button>
             </div>
         </motion.div>
@@ -184,6 +176,7 @@ function MeetingBody({ pin, share }: { pin: { lat: number; lng: number }; share:
             className="flex flex-col gap-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0.15 } }}
             transition={BODY_TRANSITION}
         >
             {share.mode === "shared" ? (
