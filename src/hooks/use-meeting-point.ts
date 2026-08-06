@@ -34,10 +34,16 @@ export function useMeetingPoint(search: { lat: number | undefined; lng: number |
         setSheetOpen(false)
     }
 
+    const handleClearPin = () => {
+        clearSelection()
+        void navigate({ to: "/", search: {}, replace: true })
+    }
+
     return {
         pin,
         handleTap,
         handleMeetHere,
+        handleClearPin,
         filter: { clearFilters, hasActiveFilters: hasActiveFilters(query, selected) },
     }
 }

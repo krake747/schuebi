@@ -216,6 +216,7 @@ function MeetingPointPage() {
                                 attraction={selected}
                                 pin={pin}
                                 onClose={clearSelection}
+                                onClearPin={meeting.handleClearPin}
                             />
                         </SlideUpPresence>
                     ) : !sheetOpen ? (

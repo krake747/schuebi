@@ -92,6 +92,17 @@ test("tapping the map canvas sets a meeting point", async () => {
     await expect.poll(() => document.querySelector('[data-testid="pin"]')).not.toBeNull()
 })
 
+test("clearing the pin returns to the empty state", async () => {
+    mountApp("/?lat=49.6168&lng=6.1237")
+
+    const clearPin = page.getByRole("button", { name: "Clear pin" })
+    await expect.element(clearPin).toBeVisible()
+    await clearPin.click()
+
+    await expect.poll(() => document.querySelector('[data-testid="pin"]')).toBeNull()
+    await expect.element(page.getByText(/Tap the map to set a meeting point/)).toBeVisible()
+})
+
 test("shows a preview card for a selected attraction and meets there", async () => {
     mountApp("/")
 
