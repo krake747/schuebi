@@ -22,5 +22,7 @@ export const useSelection = create<SelectionState>((set) => ({
 }))
 
 export function selectSelectedAttraction(state: SelectionState): Attraction | null {
-    return state.selectedId === null ? null : (ATTRACTIONS.find((attraction) => attraction.id === state.selectedId) ?? null)
+    return state.selectedId === null
+        ? null
+        : (ATTRACTIONS.find((attraction) => attraction.id === state.selectedId) ?? null)
 }

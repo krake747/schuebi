@@ -17,6 +17,8 @@ import { useFilters } from "@/store/use-filters"
 import { useFavourites } from "@/store/use-favourites"
 import { useFilteredAttractions } from "@/hooks/use-filtered-attractions"
 
+const FILTER_OPTIONS = buildFilters()
+
 export function FilterDrawer() {
     const selected = useFilters((state) => state.selected)
     const toggle = useFilters((state) => state.toggle)
@@ -24,7 +26,6 @@ export function FilterDrawer() {
     const open = useFilters((state) => state.open)
     const setOpen = useFilters((state) => state.setOpen)
     const favouriteIds = useFavourites((state) => state.ids)
-    const allFilters = buildFilters()
     const count = useFilteredAttractions().length
 
     return (
@@ -76,7 +77,7 @@ export function FilterDrawer() {
                     )}
                     <fieldset className="flex flex-wrap gap-2">
                         <legend className="sr-only">Filter by type</legend>
-                        {allFilters.map((f) => {
+                        {FILTER_OPTIONS.map((f) => {
                             const active = selected.includes(f.key)
                             const color = categoryStyle(f.key)
                             return (

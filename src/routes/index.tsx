@@ -25,7 +25,8 @@ import { ATTRACTIONS } from "@/data/attractions-generated"
 import { useFilteredAttractions } from "@/hooks/use-filtered-attractions"
 import { useMeetingPoint } from "@/hooks/use-meeting-point"
 import { cn } from "@/lib/utils"
-import { categoryStyle, facilityCategory } from "@/data/attractions"
+import { categoryStyle, facilityCategory, isFacility } from "@/data/attractions"
+import { pickRandom } from "@/utils/random"
 import { useFilters } from "@/store/use-filters"
 import { selectSelectedAttraction, useSelection } from "@/store/use-selection"
 import { useFavourites } from "@/store/use-favourites"
@@ -131,6 +132,7 @@ function MeetingPointPage() {
     const open = useFilters((state) => state.open)
     const setFiltersOpen = useFilters((state) => state.setOpen)
     const favouriteIds = new Set(useFavourites((state) => state.ids))
+    const surprising = filtered.filter((attraction) => !isFacility(attraction))
 
     return (
         <div className="relative h-dvh bg-muted">
@@ -221,7 +223,13 @@ function MeetingPointPage() {
                         </SlideUpPresence>
                     ) : !sheetOpen ? (
                         <SlideUpPresence key="empty">
-                            <EmptyState />
+                            <EmptyState
+                                disabled={surprising.length === 0}
+                                onSurprise={() => {
+                                    const pick = pickRandom(surprising)
+                                    if (pick) selectAttraction(pick.id)
+                                }}
+                            />
                         </SlideUpPresence>
                     ) : null}
                 </AnimatePresence>

@@ -23,9 +23,51 @@ type AttractionPreviewProps = {
 
 const BODY_TRANSITION = { duration: 0.28, ease: [0.32, 0.72, 0, 1] as const }
 
+function ActionButtons({ target, onClearPin }: { target: { lat: number; lng: number }; onClearPin?: () => void }) {
+    const { share, copied } = useShare()
+    return (
+        <div className="flex items-stretch gap-2">
+            <Button
+                size="lg"
+                variant="secondary"
+                className="hit-area-y-1 flex-1"
+                nativeButton={false}
+                render={
+                    <a
+                        href={googleMapsDirectionsUrl(target.lat, target.lng)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    />
+                }
+            >
+                <Navigation className="size-4" aria-hidden />
+                Direct me
+            </Button>
+            <Button
+                size="lg"
+                className="hit-area-y-1 flex-1"
+                onClick={() => share(buildShareUrl(target.lat, target.lng))}
+            >
+                <Share2 className="size-4" aria-hidden />
+                {copied ? "Link copied" : "Share"}
+            </Button>
+            {onClearPin !== undefined && (
+                <Button
+                    size="icon-lg"
+                    variant="ghost"
+                    className="hit-area-y-1"
+                    onClick={onClearPin}
+                    aria-label="Clear pin"
+                >
+                    <Trash2 className="size-4" aria-hidden />
+                </Button>
+            )}
+        </div>
+    )
+}
+
 export function AttractionPreview({ attraction, pin, onClose, onClearPin }: AttractionPreviewProps) {
     const [imageFailed, setImageFailed] = useState(false)
-    const { share, copied } = useShare()
     const showPhoto = attraction !== null && hasPhoto(attraction) && !imageFailed
 
     const target = pin ?? (attraction !== null ? { lat: attraction.lat, lng: attraction.lng } : null)
@@ -107,75 +149,11 @@ export function AttractionPreview({ attraction, pin, onClose, onClearPin }: Attr
                         </motion.p>
                     )}
                     {target !== null && (
-                        <motion.div
-                            className={pin !== null ? "flex items-stretch gap-2" : "grid grid-cols-2 gap-2"}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={BODY_TRANSITION}
-                        >
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={BODY_TRANSITION}>
                             {pin !== null ? (
-                                <>
-                                    <Button
-                                        size="lg"
-                                        variant="secondary"
-                                        className="hit-area-y-1 flex-1"
-                                        nativeButton={false}
-                                        render={
-                                            <a
-                                                href={googleMapsDirectionsUrl(target.lat, target.lng)}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                            />
-                                        }
-                                    >
-                                        <Navigation className="size-4" aria-hidden />
-                                        Direct me
-                                    </Button>
-                                    <Button
-                                        size="lg"
-                                        className="hit-area-y-1 flex-1"
-                                        onClick={() => share(buildShareUrl(target.lat, target.lng))}
-                                    >
-                                        <Share2 className="size-4" aria-hidden />
-                                        {copied ? "Link copied" : "Share"}
-                                    </Button>
-                                    <Button
-                                        size="icon-lg"
-                                        variant="ghost"
-                                        className="hit-area-y-1"
-                                        onClick={onClearPin}
-                                        aria-label="Clear pin"
-                                    >
-                                        <Trash2 className="size-4" aria-hidden />
-                                    </Button>
-                                </>
+                                <ActionButtons target={target} onClearPin={onClearPin} />
                             ) : (
-                                <>
-                                    <Button
-                                        size="lg"
-                                        variant="secondary"
-                                        className="hit-area-y-1 w-full"
-                                        nativeButton={false}
-                                        render={
-                                            <a
-                                                href={googleMapsDirectionsUrl(target.lat, target.lng)}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                            />
-                                        }
-                                    >
-                                        <Navigation className="size-4" aria-hidden />
-                                        Direct me
-                                    </Button>
-                                    <Button
-                                        size="lg"
-                                        className="hit-area-y-1 w-full"
-                                        onClick={() => share(buildShareUrl(target.lat, target.lng))}
-                                    >
-                                        <Share2 className="size-4" aria-hidden />
-                                        {copied ? "Link copied" : "Share"}
-                                    </Button>
-                                </>
+                                <ActionButtons target={target} />
                             )}
                         </motion.div>
                     )}

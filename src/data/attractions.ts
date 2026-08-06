@@ -60,6 +60,12 @@ const FACILITY_CATEGORY: Record<string, string> = {
     Police: "Info & Safety",
 }
 
+const FACILITY_GROUPS: ReadonlySet<string> = new Set(["Toilets", "ATM", "Info & Safety"])
+
+export function isFacility(attraction: Attraction): boolean {
+    return FACILITY_GROUPS.has(facilityCategory(attraction.category))
+}
+
 export function facilityCategory(key: string): string {
     return FACILITY_CATEGORY[key] ?? key
 }
