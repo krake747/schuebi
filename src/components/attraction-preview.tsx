@@ -152,6 +152,7 @@ function AttractionBody({
                     size="lg"
                     variant="secondary"
                     className="hit-area-y-1 w-full"
+                    nativeButton={false}
                     render={
                         <a
                             href={googleMapsDirectionsUrl(attraction.lat, attraction.lng)}
@@ -190,6 +191,7 @@ function MeetingBody({ pin, share }: { pin: { lat: number; lng: number }; share:
                     <Button
                         size="lg"
                         className="hit-area-y-1 w-full bg-emerald-500 text-white hover:bg-emerald-600"
+                        nativeButton={false}
                         render={
                             <a
                                 href={googleMapsDirectionsUrl(pin.lat, pin.lng)}
@@ -220,6 +222,7 @@ function MeetingBody({ pin, share }: { pin: { lat: number; lng: number }; share:
                             size="lg"
                             variant="secondary"
                             className="hit-area-y-1 w-full"
+                            nativeButton={false}
                             render={
                                 <a
                                     href={googleMapsDirectionsUrl(pin.lat, pin.lng)}

@@ -198,6 +198,7 @@ function MeetingPointPage() {
                             aria-label="Source code on GitHub"
                         />
                     }
+                    nativeButton={false}
                     variant="secondary"
                     size="icon"
                     className="absolute bottom-5 left-3 z-10 rounded-full shadow-md"
